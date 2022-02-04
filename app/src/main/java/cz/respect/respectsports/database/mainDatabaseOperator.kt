@@ -1,10 +1,8 @@
 package cz.respect.respectsports.database
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import cz.respect.respectsports.domain.DevByteVideo
 import cz.respect.respectsports.domain.Match
 
 @Dao
@@ -17,18 +15,18 @@ interface MatchDao {
 }
 
 @Database(entities = [DatabaseMatch::class], version = 1)
-abstract class MatchesDatabase: RoomDatabase() {
+abstract class MainDatabase: RoomDatabase() {
     abstract val matchDao: MatchDao
 }
 
-private lateinit var INSTANCE: MatchesDatabase
+private lateinit var INSTANCE: MainDatabase
 
-fun getMainDatabase(context: Context): MatchesDatabase {
-    synchronized(MatchesDatabase::class.java) {
+fun getMainDatabase(context: Context): MainDatabase {
+    synchronized(MainDatabase::class.java) {
         if (!::INSTANCE.isInitialized) {
             INSTANCE = Room.databaseBuilder(context.applicationContext,
-                MatchesDatabase::class.java,
-                "mainDb2").build()
+                MainDatabase::class.java,
+                "matchesDb").build()
         }
     }
     return INSTANCE

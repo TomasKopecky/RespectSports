@@ -11,7 +11,7 @@ import java.io.IOException
 class GalleryViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is gallery Fragment"
+        value = "Zde bude seznam zápasů uživatele"
     }
     val text: LiveData<String> = _text
 

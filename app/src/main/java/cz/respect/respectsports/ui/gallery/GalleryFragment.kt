@@ -36,9 +36,6 @@ class GalleryFragment : Fragment() {
         galleryViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
-        val matchesListView: ListView = binding.matchesList
-        galleryViewModel.matchesList.observe(viewLifecycleOwner) {
-        }
 
         val textViewNew: TextView = binding.textsHome
         galleryViewModel.matchesList.observe(viewLifecycleOwner) {

@@ -1,5 +1,6 @@
 package cz.respect.respectsports
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import com.google.android.material.snackbar.Snackbar
@@ -11,11 +12,12 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
-import cz.respect.respectsports.database.getDatabase
+//import cz.respect.respectsports.database.getDatabase
 //import androidx.room.Room
 //import cz.respect.respectsports.database.AppDatabase
 //import cz.respect.respectsports.database.User
 import cz.respect.respectsports.databinding.ActivityMainBinding
+import cz.respect.respectsports.ui.login.LoginActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,7 +26,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-getDatabase(this)
+
+        val intent = Intent(this, LoginActivity::class.java).apply {
+            //putExtra(EXTRA_MESSAGE, message)
+        }
+        startActivity(intent)
+//getDatabase(this)
 /*
         val db = Room.databaseBuilder(
             applicationContext,
