@@ -35,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
 
 
         fun startLoginLoading() {
-            if (username.length() > 0 && password.length() > 5) {
+            if (username.length() > 0 && password.length() > 4) {
                 username.isEnabled = false
                 password.isEnabled = false
                 login.isEnabled = false
@@ -86,7 +86,7 @@ class LoginActivity : AppCompatActivity() {
             if (loginResult.success != null) {
                 endLoginLoading()
                 updateUiWithUser(loginResult.success)
-                //finish()
+                finish()
             }
             setResult(Activity.RESULT_OK)
 
@@ -122,7 +122,6 @@ class LoginActivity : AppCompatActivity() {
             login.setOnClickListener {
                 startLoginLoading()
             }
-
 
         }
 

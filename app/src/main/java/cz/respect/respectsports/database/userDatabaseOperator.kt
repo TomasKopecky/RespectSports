@@ -7,11 +7,14 @@ import cz.respect.respectsports.domain.User
 
 @Dao
 interface UserDao {
-    @Query("select * from users")
+    @Query("SELECT * FROM users")
     fun getLoggedUser(): LiveData<DatabaseUser>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertLoggedUser( user: DatabaseUser)
+
+    @Query("DELETE FROM users")
+    fun deleteAll()
 }
 
 @Entity(tableName = "users")

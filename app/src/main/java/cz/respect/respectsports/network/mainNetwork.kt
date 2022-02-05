@@ -68,6 +68,6 @@ object MatchNetwork {
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
 
-    val matches = retrofit.create(MatchService::class.java)
+    val matches: MatchService = retrofit.create(MatchService::class.java)
 
 }

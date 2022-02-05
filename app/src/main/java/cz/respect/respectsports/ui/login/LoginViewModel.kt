@@ -30,14 +30,12 @@ class LoginViewModel (private val loginRepository: LoginRepository, application:
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
-    private fun refreshUserFromRepository() {
+    private fun refreshUserFromRepository(username: String, password: String) {
         viewModelScope.launch {
-            Log.i("MY_INFO", "SUCCESS")
             try {
-                Log.i("MY_INFO", "SUCCESS2")
-                userRepository.refreshUsers()
+                userRepository.refreshUsers(username, password)
                 //message.value = "LOGIN OK"
-                _loginResult.value = LoginResult(success = LoggedInUserView(displayName = "sldfjsadlkfa"))
+                _loginResult.value = LoginResult(success = LoggedInUserView(displayName = username))
                 Log.i("MY_INFO", "SUCCESS3")
                 //message.value = "DATA NAČTENA Z INTERNETU"
                 //_eventNetworkError.value = false
@@ -59,7 +57,7 @@ class LoginViewModel (private val loginRepository: LoginRepository, application:
 
             catch (serverError: HttpException) {
                 Log.i("MY_INFO", "NETWORK HTTP CONNECTION ERROR - NO DATA OBTAINED: " + serverError.message)
-                message.value = "Chyba při přihlašování - server vrátil chybu"
+                message.value = "Neplatné přihlašovací údaje"
             }
 
             catch (dataStructureError: JsonDataException) {
@@ -74,7 +72,7 @@ class LoginViewModel (private val loginRepository: LoginRepository, application:
 
     fun login(username: String, password: String) {
         // can be launched in a separate asynchronous job
-        refreshUserFromRepository()
+        refreshUserFromRepository(username, password)
 /*
         val result = loginRepository.login(username, password)
 
@@ -109,6 +107,6 @@ class LoginViewModel (private val loginRepository: LoginRepository, application:
 
     // A placeholder password validation check
     private fun isPasswordValid(password: String): Boolean {
-        return password.length > 5
+        return password.length > 4
     }
 }

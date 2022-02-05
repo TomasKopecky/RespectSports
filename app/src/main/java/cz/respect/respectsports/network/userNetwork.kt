@@ -7,7 +7,7 @@ import cz.respect.respectsports.database.DatabaseUser
 import cz.respect.respectsports.domain.User
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.GET
+import retrofit2.http.*
 
 data class NetworkUserContainer(val user: NetworkUser)
 
@@ -39,18 +39,19 @@ private val moshi = Moshi.Builder()
     .build()
 
 interface UserService {
-    @GET("respect_table_tennis/www/98789789789079889789/login")
-    suspend fun getUser(): NetworkUserContainer
+    @FormUrlEncoded
+    @POST(LOCALHOST_LOGIN_URL)
+    suspend fun getUser(@Field("username") username: String, @Field("password") password: String): NetworkUserContainer
 }
 
 object UserNetwork {
 
     // Configure retrofit to parse JSON and use coroutines
     private val retrofit = Retrofit.Builder()
-        .baseUrl("http://10.0.2.2/")
+        .baseUrl(LOCALHOST_SERVER_URL)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
 
-    val user = retrofit.create(UserService::class.java)
+    val user: UserService = retrofit.create(UserService::class.java)
 
 }
