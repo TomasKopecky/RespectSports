@@ -8,10 +8,10 @@ import cz.respect.respectsports.domain.User
 @Dao
 interface UserDao {
     @Query("select * from users")
-    fun getLoggedUser(): LiveData<List<DatabaseUser>>
+    fun getLoggedUser(): LiveData<DatabaseUser>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertLoggedUser( user: List<DatabaseUser>)
+    fun insertLoggedUser( user: DatabaseUser)
 }
 
 @Entity(tableName = "users")
@@ -40,11 +40,6 @@ fun getUserDatabase(context: Context): UserDatabase {
 }
 
 
-fun List<DatabaseUser>.asDomainModel(): List<User> {
-    return map {
-        User(
-            id = it.id,
-            name = it.name,
-            token = it.token)
-    }
+fun DatabaseUser.asDomainModel(): User {
+    return User(id = id,name = name,token = token)
 }

@@ -3,6 +3,7 @@ package cz.respect.respectsports.ui.gallery
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.*
+import com.squareup.moshi.JsonDataException
 import cz.respect.respectsports.database.getMainDatabase
 import cz.respect.respectsports.repository.MatchesRepository
 import kotlinx.coroutines.launch
@@ -46,6 +47,12 @@ class GalleryViewModel(application: Application) : AndroidViewModel(application)
                     //Log.i("MY_INFO", "NETWORK CONNECTION ERROR - DATA OBTAINED FROM THE DATABASE")
                 }
                 //_eventNetworkError.value = true
+            }
+            catch (serverError: retrofit2.HttpException) {
+                message.value = "Chyba při přihlašování - server vrátil chybu"
+            }
+            catch (dataStructureError: JsonDataException) {
+                message.value = "Chyba při přihlašování - server odpověděl chybně"
             }
         }
     }

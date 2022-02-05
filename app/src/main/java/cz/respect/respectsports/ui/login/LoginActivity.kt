@@ -1,20 +1,21 @@
 package cz.respect.respectsports.ui.login
 
 import android.app.Activity
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import cz.respect.respectsports.R
 import cz.respect.respectsports.databinding.ActivityLoginBinding
 
-import cz.respect.respectsports.R
 
 class LoginActivity : AppCompatActivity() {
 
@@ -32,12 +33,31 @@ class LoginActivity : AppCompatActivity() {
         val login = binding.login
         val loading = binding.loading
 
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
+
+        fun startLoginLoading() {
+            if (username.length() > 0 && password.length() > 5) {
+                username.isEnabled = false
+                password.isEnabled = false
+                login.isEnabled = false
+                loading.visibility = View.VISIBLE
+                loginViewModel.login(username.text.toString(), password.text.toString())
+            }
+        }
+
+        fun endLoginLoading() {
+            username.isEnabled = true
+            password.isEnabled = true
+            login.isEnabled = true
+            loading.visibility = View.INVISIBLE
+        }
+
+        loginViewModel = ViewModelProvider(this, LoginViewModelFactory(application))
             .get(LoginViewModel::class.java)
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
 
+            // disable login button unless both username / password is valid
             // disable login button unless both username / password is valid
             login.isEnabled = loginState.isDataValid
 
@@ -49,20 +69,29 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
+        loginViewModel.message.observe(this, Observer {
+            Log.i("MY_INFO", "OBSERVING DONE")
+            endLoginLoading()
+            showResultMessage(it)
+        })
+
         loginViewModel.loginResult.observe(this@LoginActivity, Observer {
             val loginResult = it ?: return@Observer
+            Log.i("MY_INFO", "RESULT OBTAINED")
 
-            loading.visibility = View.GONE
             if (loginResult.error != null) {
+                endLoginLoading()
                 showLoginFailed(loginResult.error)
             }
             if (loginResult.success != null) {
+                endLoginLoading()
                 updateUiWithUser(loginResult.success)
+                //finish()
             }
             setResult(Activity.RESULT_OK)
 
             //Complete and destroy login activity once successful
-            finish()
+            //finish()
         })
 
         username.afterTextChanged {
@@ -80,37 +109,48 @@ class LoginActivity : AppCompatActivity() {
                 )
             }
 
+
+
             setOnEditorActionListener { _, actionId, _ ->
                 when (actionId) {
                     EditorInfo.IME_ACTION_DONE ->
-                        loginViewModel.login(
-                            username.text.toString(),
-                            password.text.toString()
-                        )
+                        startLoginLoading()
                 }
                 false
             }
 
             login.setOnClickListener {
-                loading.visibility = View.VISIBLE
-                loginViewModel.login(username.text.toString(), password.text.toString())
+                startLoginLoading()
             }
+
+
         }
+
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
-        val welcome = getString(R.string.welcome)
+        val userWelcomeStart = getString(R.string.user_welcome_start)
+        val userWelcomeEnd = getString(R.string.user_welcome_end)
         val displayName = model.displayName
         // TODO : initiate successful logged in experience
         Toast.makeText(
             applicationContext,
-            "$welcome $displayName",
+            "$userWelcomeStart $displayName $userWelcomeEnd",
             Toast.LENGTH_LONG
         ).show()
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {
         Toast.makeText(applicationContext, errorString, Toast.LENGTH_SHORT).show()
+    }
+
+
+    private fun showResultMessage(apiResponseString:String) {
+        Toast.makeText(
+            this,
+            apiResponseString,
+            Toast.LENGTH_LONG
+        ).show()
     }
 }
 

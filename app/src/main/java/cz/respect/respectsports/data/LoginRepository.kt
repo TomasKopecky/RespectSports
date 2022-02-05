@@ -1,6 +1,21 @@
 package cz.respect.respectsports.data
 
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.viewModelScope
 import cz.respect.respectsports.data.model.LoggedInUser
+import cz.respect.respectsports.database.UserDatabase
+import cz.respect.respectsports.database.asDomainModel
+import cz.respect.respectsports.database.getMainDatabase
+import cz.respect.respectsports.domain.User
+import cz.respect.respectsports.network.UserNetwork
+import cz.respect.respectsports.network.asDatabaseModel
+import cz.respect.respectsports.repository.MatchesRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -8,6 +23,7 @@ import cz.respect.respectsports.data.model.LoggedInUser
  */
 
 class LoginRepository(val dataSource: LoginDataSource) {
+
 
     // in-memory cache of the loggedInUser object
     var user: LoggedInUser? = null
@@ -32,7 +48,7 @@ class LoginRepository(val dataSource: LoginDataSource) {
         val result = dataSource.login(username, password)
 
         if (result is Result.Success) {
-            setLoggedInUser(result.data)
+           setLoggedInUser(result.data)
         }
 
         return result

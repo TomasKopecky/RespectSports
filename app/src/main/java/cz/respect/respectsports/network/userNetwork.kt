@@ -9,12 +9,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 
-data class NetworkUserContainer(val users: List<NetworkUser>)
-
-interface UserService {
-    @GET("respect_table_tennis/www/98789789789079889789/login")
-    suspend fun getUser(): NetworkUserContainer
-}
+data class NetworkUserContainer(val user: NetworkUser)
 
 @JsonClass(generateAdapter = true)
 data class NetworkUser(
@@ -25,26 +20,16 @@ data class NetworkUser(
 /**
  * Convert Network results to database objects
  */
-fun NetworkUserContainer.asDomainModel(): List<User> {
-    return users.map {
-        User(
-            id = it.id,
-            name = it.name,
-            token = it.token)
-    }
+fun NetworkUserContainer.asDomainModel(): User {
+    return User(user.id,user.name,user.token)
 }
 
 
 /**
  * Convert Network results to database objects
  */
-fun NetworkUserContainer.asDatabaseModel(): List<DatabaseUser> {
-    return users.map {
-        DatabaseUser(
-            id = it.id,
-            name = it.name,
-            token = it.token)
-    }
+fun NetworkUserContainer.asDatabaseModel(): DatabaseUser {
+    return DatabaseUser(user.id,user.name,user.token)
 }
 /**
  * Main entry point for network access. Call like `DevByteNetwork.devbytes.getPlaylist()`
@@ -52,6 +37,11 @@ fun NetworkUserContainer.asDatabaseModel(): List<DatabaseUser> {
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
     .build()
+
+interface UserService {
+    @GET("respect_table_tennis/www/98789789789079889789/login")
+    suspend fun getUser(): NetworkUserContainer
+}
 
 object UserNetwork {
 
@@ -61,6 +51,6 @@ object UserNetwork {
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
 
-    val users = retrofit.create(UserService::class.java)
+    val user = retrofit.create(UserService::class.java)
 
 }

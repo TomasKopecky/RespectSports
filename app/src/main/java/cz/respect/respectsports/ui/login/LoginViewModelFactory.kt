@@ -1,15 +1,19 @@
 package cz.respect.respectsports.ui.login
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cz.respect.respectsports.data.LoginDataSource
 import cz.respect.respectsports.data.LoginRepository
+import cz.respect.respectsports.database.UserDatabase
+import cz.respect.respectsports.database.getUserDatabase
+import cz.respect.respectsports.ui.gallery.GalleryViewModel
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.
  * Required given LoginViewModel has a non-empty constructor
  */
-class LoginViewModelFactory : ViewModelProvider.Factory {
+class LoginViewModelFactory(val app: Application) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -17,7 +21,7 @@ class LoginViewModelFactory : ViewModelProvider.Factory {
             return LoginViewModel(
                 loginRepository = LoginRepository(
                     dataSource = LoginDataSource()
-                )
+                ), application = app
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
