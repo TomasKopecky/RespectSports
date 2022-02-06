@@ -1,19 +1,17 @@
-package cz.respect.respectsports.ui.gallery
+package cz.respect.respectsports.ui.tableTennis
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import cz.respect.respectsports.databinding.FragmentGalleryBinding
-import cz.respect.respectsports.domain.Match
 
-class GalleryFragment : Fragment() {
+class TableTennisFragment : Fragment() {
 
     private var _binding: FragmentGalleryBinding? = null
 
@@ -27,7 +25,7 @@ class GalleryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val galleryViewModel =
-            ViewModelProvider(this).get(GalleryViewModel::class.java)
+            ViewModelProvider(this).get(TableTennisViewModel::class.java)
 
         _binding = FragmentGalleryBinding.inflate(inflater, container, false)
         val root: View = binding.root

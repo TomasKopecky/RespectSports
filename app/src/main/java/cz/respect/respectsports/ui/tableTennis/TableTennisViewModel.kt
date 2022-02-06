@@ -1,7 +1,6 @@
-package cz.respect.respectsports.ui.gallery
+package cz.respect.respectsports.ui.tableTennis
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
 import com.squareup.moshi.JsonDataException
 import cz.respect.respectsports.database.getMainDatabase
@@ -9,7 +8,7 @@ import cz.respect.respectsports.repository.MatchesRepository
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-class GalleryViewModel(application: Application) : AndroidViewModel(application) {
+class TableTennisViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _text = MutableLiveData<String>().apply {
         value = "Zde bude seznam zápasů uživatele"

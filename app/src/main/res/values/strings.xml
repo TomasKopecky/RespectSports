@@ -7,8 +7,9 @@
     <string name="action_settings">Nastavení</string>
 
     <string name="menu_home">Přehled</string>
-    <string name="menu_gallery">Stolní tenis</string>
-    <string name="menu_slideshow">Kontakty</string>
+    <string name="menu_table_tennis">Stolní tenis</string>
+    <string name="menu_contacts">Kontakty</string>
+    <string name="menu_logout">Odhlásit</string>
     <string name="title_activity_login">Přihlášení</string>
     <string name="prompt_email">E-mail</string>
     <string name="prompt_password">Heslo</string>
