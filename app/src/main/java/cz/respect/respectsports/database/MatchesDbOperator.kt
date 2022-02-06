@@ -14,24 +14,6 @@ interface MatchDao {
     fun insertAll( matches: List<DatabaseMatch>)
 }
 
-@Database(entities = [DatabaseMatch::class], version = 1)
-abstract class MainDatabase: RoomDatabase() {
-    abstract val matchDao: MatchDao
-}
-
-private lateinit var INSTANCE: MainDatabase
-
-fun getMainDatabase(context: Context): MainDatabase {
-    synchronized(MainDatabase::class.java) {
-        if (!::INSTANCE.isInitialized) {
-            INSTANCE = Room.databaseBuilder(context.applicationContext,
-                MainDatabase::class.java,
-                "matchesDb").build()
-        }
-    }
-    return INSTANCE
-}
-
 @Entity(tableName = "matches")
 data class DatabaseMatch constructor(
     @PrimaryKey

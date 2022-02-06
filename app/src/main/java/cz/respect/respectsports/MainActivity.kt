@@ -1,37 +1,65 @@
 package cz.respect.respectsports
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-//import cz.respect.respectsports.database.getDatabase
-//import androidx.room.Room
-//import cz.respect.respectsports.database.AppDatabase
-//import cz.respect.respectsports.database.User
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import cz.respect.respectsports.databinding.ActivityMainBinding
+import cz.respect.respectsports.databinding.NavHeaderMainBinding
 import cz.respect.respectsports.ui.login.LoginActivity
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
+    var username = "dalsfsjkd"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
 
-        val intent = Intent(this, LoginActivity::class.java).apply {
-            //putExtra(EXTRA_MESSAGE, message)
+        var launchSomeActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            //Log.i("MY_INFO", intent.getStringExtra("some_key").toString())
+
+            if (result.resultCode == Activity.RESULT_OK) {
+                val viewHeader = binding.navView.getHeaderView(0)
+                val navViewHeaderBinding : NavHeaderMainBinding = NavHeaderMainBinding.bind(viewHeader)
+                val intent = result.data
+                // passing obtained username of the logged user to the activity_main view (nav_view_header)
+                intent?.getStringExtra("username")?.let { navViewHeaderBinding.username = it/*binding.appBarMain.toolbar.title = getString(R.string.menu_home)+" - "+it */ }
+                //binding.appBarMain.toolbar.title = getString(R.string.user_welcome_start)+" - "+it
+
+            }
         }
-        startActivity(intent)
+
+        /*
+        val intent = Intent(this, LoginActivity::class.java).apply {
+            //putExtra("name", "asljfk")
+        }
+
+         */
+        val intent = Intent(this, LoginActivity::class.java)
+        launchSomeActivity.launch(intent)
+        //startActivity(intent)
+
+        //Toast.makeText(applicationContext, "fadslfjasdl", Toast.LENGTH_SHORT).show()
+        //intent.data.toString()
+
+
 //getDatabase(this)
 /*
         val db = Room.databaseBuilder(
@@ -65,6 +93,8 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+
 
     }
 

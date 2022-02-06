@@ -5,9 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cz.respect.respectsports.data.LoginDataSource
 import cz.respect.respectsports.data.LoginRepository
-import cz.respect.respectsports.database.UserDatabase
-import cz.respect.respectsports.database.getUserDatabase
-import cz.respect.respectsports.ui.gallery.GalleryViewModel
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.

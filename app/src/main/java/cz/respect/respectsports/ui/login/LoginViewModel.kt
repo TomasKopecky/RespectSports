@@ -9,7 +9,7 @@ import cz.respect.respectsports.data.LoginRepository
 import cz.respect.respectsports.data.Result
 
 import cz.respect.respectsports.R
-import cz.respect.respectsports.database.getUserDatabase
+import cz.respect.respectsports.database.getMainDatabase
 import cz.respect.respectsports.repository.UserRepository
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -21,7 +21,7 @@ class LoginViewModel (private val loginRepository: LoginRepository, application:
 
     val message : MutableLiveData<String> = _message
 
-    private val userRepository = UserRepository(getUserDatabase(application))
+    private val userRepository = UserRepository(getMainDatabase(application))
     val loggedUser = userRepository.user
 
     private val _loginForm = MutableLiveData<LoginFormState>()

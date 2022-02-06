@@ -5,9 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.viewModelScope
 import cz.respect.respectsports.data.model.LoggedInUser
-import cz.respect.respectsports.database.UserDatabase
 import cz.respect.respectsports.database.asDomainModel
-import cz.respect.respectsports.database.getMainDatabase
 import cz.respect.respectsports.domain.User
 import cz.respect.respectsports.network.UserNetwork
 import cz.respect.respectsports.network.asDatabaseModel

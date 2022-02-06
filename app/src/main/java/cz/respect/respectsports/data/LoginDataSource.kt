@@ -1,8 +1,6 @@
 package cz.respect.respectsports.data
 
 import cz.respect.respectsports.data.model.LoggedInUser
-import cz.respect.respectsports.database.getUserDatabase
-import cz.respect.respectsports.repository.UserRepository
 import java.io.IOException
 
 /**

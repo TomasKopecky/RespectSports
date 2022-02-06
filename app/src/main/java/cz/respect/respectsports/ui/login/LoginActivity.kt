@@ -1,6 +1,7 @@
 package cz.respect.respectsports.ui.login
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -86,9 +87,11 @@ class LoginActivity : AppCompatActivity() {
             if (loginResult.success != null) {
                 endLoginLoading()
                 updateUiWithUser(loginResult.success)
+                val resultIntent = Intent()
+                resultIntent.putExtra("username", it.success?.displayName)
+                setResult(Activity.RESULT_OK, resultIntent)
                 finish()
             }
-            setResult(Activity.RESULT_OK)
 
             //Complete and destroy login activity once successful
             //finish()
