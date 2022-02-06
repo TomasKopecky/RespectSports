@@ -6,7 +6,6 @@ import android.util.Patterns
 import androidx.lifecycle.*
 import com.squareup.moshi.JsonDataException
 import cz.respect.respectsports.data.LoginRepository
-import cz.respect.respectsports.data.Result
 
 import cz.respect.respectsports.R
 import cz.respect.respectsports.database.getMainDatabase
@@ -33,7 +32,7 @@ class LoginViewModel (private val loginRepository: LoginRepository, application:
     private fun refreshUserFromRepository(username: String, password: String) {
         viewModelScope.launch {
             try {
-                userRepository.refreshUsers(username, password)
+                userRepository.refreshUser(username, password)
                 //message.value = "LOGIN OK"
                 _loginResult.value = LoginResult(success = LoggedInUserView(displayName = username))
                 Log.i("MY_INFO", "SUCCESS3")

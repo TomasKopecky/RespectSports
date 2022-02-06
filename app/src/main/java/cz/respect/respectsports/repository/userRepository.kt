@@ -17,12 +17,18 @@ class UserRepository(private val database: MainDatabase) {
         it.asDomainModel()
     }
 
-    suspend fun refreshUsers(username: String, password: String) {
+    suspend fun refreshUser(username: String, password: String) {
         withContext(Dispatchers.IO) {
-            database.userDao.deleteAll()
+            //database.userDao.deleteAll()
             val user = UserNetwork.user.getUser(username, password)
             database.userDao.insertLoggedUser(user.asDatabaseModel())
             Log.i("MY_INFO", "DATA WRITTEN TO THE DATABASE")
         }
+    }
+
+    suspend fun deleteUser() {
+        withContext(Dispatchers.IO) {
+        database.userDao.deleteAll()
+    }
     }
 }

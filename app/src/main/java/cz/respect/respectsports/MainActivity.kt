@@ -28,10 +28,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
+/*
         var launchSomeActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            //Log.i("MY_INFO", intent.getStringExtra("some_key").toString())
-
+            Log.i("MY_INFO", intent.getStringExtra("username").toString())
             if (result.resultCode == Activity.RESULT_OK) {
                 val viewHeader = binding.navView.getHeaderView(0)
                 val navViewHeaderBinding : NavHeaderMainBinding = NavHeaderMainBinding.bind(viewHeader)
@@ -41,7 +40,13 @@ class MainActivity : AppCompatActivity() {
                 //binding.appBarMain.toolbar.title = getString(R.string.user_welcome_start)+" - "+it
 
             }
+
         }
+
+ */
+
+
+
 
         /*
         val intent = Intent(this, LoginActivity::class.java).apply {
@@ -49,9 +54,12 @@ class MainActivity : AppCompatActivity() {
         }
 
          */
-        val intent = Intent(this, LoginActivity::class.java)
-        launchSomeActivity.launch(intent)
+
+
+        //val intent = Intent(this, LoginActivity::class.java)
+        //launchSomeActivity.launch(intent)
         //startActivity(intent)
+        //finish()
 
         //Toast.makeText(applicationContext, "fadslfjasdl", Toast.LENGTH_SHORT).show()
         //intent.data.toString()
@@ -79,13 +87,23 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Action", null).show()
         }
 
+
+        // obtained username from loginactivity after successfull login
+        intent.getStringExtra("username")?.let {
+            val viewHeader = binding.navView.getHeaderView(0)
+            val navViewHeaderBinding: NavHeaderMainBinding = NavHeaderMainBinding.bind(viewHeader)
+            navViewHeaderBinding.username = it
+        }
+
+        /*
         binding.navView.menu.getItem(3).setOnMenuItemClickListener {
             Log.i("MY_INFO", "Logout run")
-            val intent = getIntent()
-            finish()
-            startActivity(intent)
+            //finish()
+            //startActivity(getIntent())
             true
         }
+
+         */
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView

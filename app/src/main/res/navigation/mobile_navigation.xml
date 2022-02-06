@@ -15,17 +15,15 @@
         android:id="@+id/nav_table_tennis"
         android:name="cz.respect.respectsports.ui.tableTennis.TableTennisFragment"
         android:label="@string/menu_table_tennis"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_table_tennis" />
 
     <fragment
         android:id="@+id/nav_contacts"
         android:name="cz.respect.respectsports.ui.contacts.ContactFragment"
         android:label="@string/menu_contacts"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_contacts" />
 
-    <action
+    <fragment
         android:id="@+id/nav_logout"
-        android:name="cz.respect.respectsports.ui.slideshow.LogoutItem"
-        android:label="@string/menu_logout"
-        android:onClick="function"/>
+        android:name="cz.respect.respectsports.ui.logout.LogoutFragment" />
 </navigation>

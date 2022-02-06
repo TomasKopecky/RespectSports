@@ -14,6 +14,7 @@ import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import cz.respect.respectsports.MainActivity
 import cz.respect.respectsports.R
 import cz.respect.respectsports.databinding.ActivityLoginBinding
 
@@ -25,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.i("MY_INFO", "LOGIN ACTIVITY STARTED")
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -87,10 +89,17 @@ class LoginActivity : AppCompatActivity() {
             if (loginResult.success != null) {
                 endLoginLoading()
                 updateUiWithUser(loginResult.success)
-                val resultIntent = Intent()
+                if (it.success?.displayName != null) {
+                    /*
+                val resultIntent = Intent(this, MainActivity::class.java)
                 resultIntent.putExtra("username", it.success?.displayName)
                 setResult(Activity.RESULT_OK, resultIntent)
-                finish()
+                 */
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.putExtra("username", it.success?.displayName)
+                    startActivity(intent)
+                    finish()
+                }
             }
 
             //Complete and destroy login activity once successful
