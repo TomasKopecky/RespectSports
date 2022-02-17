@@ -1,5 +1,6 @@
 package cz.respect.respectsports.ui.home
 
+import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import cz.respect.respectsports.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {

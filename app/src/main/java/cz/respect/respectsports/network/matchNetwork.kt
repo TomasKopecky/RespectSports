@@ -12,7 +12,10 @@ import cz.respect.respectsports.domain.Match
 //import cz.respect.respectsports.domain.userDomain
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 data class NetworkMatchContainer(val matches: List<NetworkMatch>)
 
@@ -22,7 +25,10 @@ data class NetworkMatchContainer(val matches: List<NetworkMatch>)
 @JsonClass(generateAdapter = true)
 data class NetworkMatch(
     val id: String,
-    val date: String)
+    val date: String,
+    val homePlayer: String,
+    val visitorPlayer: String,
+    val result: String)
 
 /**
  * Convert Network results to database objects
@@ -31,7 +37,11 @@ fun NetworkMatchContainer.asDomainModel(): List<Match> {
     return matches.map {
         Match(
             id = it.id,
-            date = it.date)
+            date = it.date,
+            homePlayer = it.homePlayer,
+            visitorPlayer = it.visitorPlayer,
+            result = it.result
+            )
     }
 }
 
@@ -44,13 +54,19 @@ fun NetworkMatchContainer.asDatabaseModel(): List<DatabaseMatch> {
     return matches.map {
         DatabaseMatch(
             id = it.id,
-            date = it.date)
+            date = it.date,
+            homePlayer = it.homePlayer,
+            visitorPlayer = it.visitorPlayer,
+            result = it.result)
     }
 }
 
 interface MatchService {
-    @GET("respect_table_tennis/www/98789789789079889789/test")
+    @GET(NetworkConstants.MATCHES_URL)
     suspend fun getMatches(): NetworkMatchContainer
+
+    @GET(NetworkConstants.MATCH_DETAIL_URL+"/{id}")
+    suspend fun getMatchDetail(@Path("id") id: String): NetworkMatchContainer
 }
 
 /**
@@ -64,10 +80,11 @@ object MatchNetwork {
 
     // Configure retrofit to parse JSON and use coroutines
     private val retrofit = Retrofit.Builder()
-        .baseUrl("http://10.0.2.2/")
+        .baseUrl(NetworkConstants.SERVER_URL)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
 
     val matches: MatchService = retrofit.create(MatchService::class.java)
+    val match: MatchService = retrofit.create(MatchService::class.java)
 
 }

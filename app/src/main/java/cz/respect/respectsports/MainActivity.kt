@@ -1,13 +1,12 @@
 package cz.respect.respectsports
 
-import android.app.Activity
-import android.content.Intent
+import android.app.Application
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -17,7 +16,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import cz.respect.respectsports.databinding.ActivityMainBinding
 import cz.respect.respectsports.databinding.NavHeaderMainBinding
-import cz.respect.respectsports.ui.login.LoginActivity
+import cz.respect.respectsports.ui.tableTennis.TableTennisMatchViewModel
 
 
 class MainActivity : AppCompatActivity() {
@@ -108,6 +107,7 @@ class MainActivity : AppCompatActivity() {
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
@@ -129,5 +129,22 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    class TableTennisMatchViewModelFactory(
+        private val app: Application,
+        private val id: String)
+        : ViewModelProvider.Factory {
+
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+
+            if (modelClass.isAssignableFrom(
+                    TableTennisMatchViewModel::class.java)) {
+
+                return TableTennisMatchViewModel(app,id) as T
+            }
+
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
     }
 }

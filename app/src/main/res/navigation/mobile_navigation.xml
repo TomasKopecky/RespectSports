@@ -15,15 +15,29 @@
         android:id="@+id/nav_table_tennis"
         android:name="cz.respect.respectsports.ui.tableTennis.TableTennisFragment"
         android:label="@string/menu_table_tennis"
-        tools:layout="@layout/fragment_table_tennis" />
+        tools:layout="@layout/fragment_table_tennis" >
+    <action
+        android:id="@+id/navigate_to_match_detail"
+        app:destination="@id/table_tennis_match" />
+</fragment>
+
+<fragment
+    android:id="@+id/nav_contacts"
+    android:name="cz.respect.respectsports.ui.contacts.ContactFragment"
+    android:label="@string/menu_contacts"
+    tools:layout="@layout/fragment_contacts" />
+
+<fragment
+    android:id="@+id/nav_logout"
+    android:name="cz.respect.respectsports.ui.logout.LogoutFragment" />
 
     <fragment
-        android:id="@+id/nav_contacts"
-        android:name="cz.respect.respectsports.ui.contacts.ContactFragment"
-        android:label="@string/menu_contacts"
-        tools:layout="@layout/fragment_contacts" />
+        android:id="@+id/table_tennis_match"
+        android:name="cz.respect.respectsports.ui.tableTennis.TableTennisMatchFragment"
+        tools:layout="@layout/fragment_table_tennis_match" >
+        <argument
+            android:name="id"
+            app:argType="string" />
+    </fragment>
 
-    <fragment
-        android:id="@+id/nav_logout"
-        android:name="cz.respect.respectsports.ui.logout.LogoutFragment" />
-</navigation>
+    </navigation>

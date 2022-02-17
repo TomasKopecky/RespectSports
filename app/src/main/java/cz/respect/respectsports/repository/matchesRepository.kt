@@ -14,17 +14,33 @@ import cz.respect.respectsports.network.asDatabaseModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class MatchesRepository(private val database: MainDatabase) {
+class MatchesRepository(private val database: MainDatabase, private val matchId: String?) {
 
     val matches: LiveData<List<Match>> = Transformations.map(database.matchDao.getMatches()) {
+        Log.i("MY_INFO", "get all matches:")
         it.asDomainModel()
     }
+
+    val match: LiveData<List<Match>> = Transformations.map(database.matchDao.getMatchDetail(matchId)) {
+        Log.i("MY_INFO", "get one match with id: :" + matchId)
+        it.asDomainModel()
+    }
+
 
     suspend fun refreshMatches() {
         withContext(Dispatchers.IO) {
             val playlist = MatchNetwork.matches.getMatches()
             database.matchDao.insertAll(playlist.asDatabaseModel())
-            Log.i("MY_INFO", "DATA WRITTEN TO THE DATABASE")
+            Log.i("MY_INFO", "DATA OF ALL MATCHES WRITTEN TO THE DATABASE")
+        }
+    }
+
+    suspend fun refreshMatchDetail(id:String) {
+        withContext(Dispatchers.IO) {
+            val playlist = MatchNetwork.match.getMatchDetail(id)
+            database.matchDao.insertAll(playlist.asDatabaseModel())
+            Log.i("MY_INFO", "DATA OF SINGLE MATCH WITH ID $id WRITTEN TO THE DATABASE")
+
         }
     }
 }

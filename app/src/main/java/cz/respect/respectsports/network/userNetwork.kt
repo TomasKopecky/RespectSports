@@ -40,7 +40,7 @@ private val moshi = Moshi.Builder()
 
 interface UserService {
     @FormUrlEncoded
-    @POST(LOCALHOST_LOGIN_URL)
+    @POST(NetworkConstants.LOGIN_URL)
     suspend fun getUser(@Field("username") username: String, @Field("password") password: String): NetworkUserContainer
 }
 
@@ -48,7 +48,7 @@ object UserNetwork {
 
     // Configure retrofit to parse JSON and use coroutines
     private val retrofit = Retrofit.Builder()
-        .baseUrl(LOCALHOST_SERVER_URL)
+        .baseUrl(NetworkConstants.SERVER_URL)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
 
