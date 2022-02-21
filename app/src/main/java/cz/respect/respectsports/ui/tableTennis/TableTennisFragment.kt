@@ -11,11 +11,8 @@ import android.widget.GridView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import cz.respect.respectsports.databinding.FragmentTableTennisBinding
 import cz.respect.respectsports.domain.Match
@@ -79,6 +76,10 @@ class TableTennisFragment : Fragment() {
         //val textView: TextView = binding.textGallery
         galleryViewModel.text.observe(viewLifecycleOwner) {
             //textView.text = it
+        }
+
+        binding.floatingActionButton3.setOnClickListener {
+            findNavController().navigate(cz.respect.respectsports.R.id.action_new_match)
         }
 
         //val textViewNew: TextView = binding.textsHome

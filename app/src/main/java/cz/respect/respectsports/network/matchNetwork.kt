@@ -12,10 +12,7 @@ import cz.respect.respectsports.domain.Match
 //import cz.respect.respectsports.domain.userDomain
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.*
 
 data class NetworkMatchContainer(val matches: List<NetworkMatch>)
 
@@ -67,6 +64,10 @@ interface MatchService {
 
     @GET(NetworkConstants.MATCH_DETAIL_URL+"/{id}")
     suspend fun getMatchDetail(@Path("id") id: String): NetworkMatchContainer
+
+    @FormUrlEncoded
+    @POST(NetworkConstants.MATCH_INSERT_URL)
+    suspend fun insertNewMatch(@Field("homePlayerId") homePLayerId: String, @Field("visitorPlayerId") visitorPlayerId: String): NetworkUserContainer
 }
 
 /**

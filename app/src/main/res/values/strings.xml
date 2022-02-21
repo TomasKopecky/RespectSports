@@ -10,6 +10,7 @@
     <string name="menu_table_tennis">Stolní tenis</string>
     <string name="page_table_tennis">Stolní tenis - zápasy</string>
     <string name="page_table_tennis_detail">Detail zápasu</string>
+    <string name="page_table_tennis_new_match">Vložení zápasu</string>
     <string name="menu_contacts">Kontakty</string>
     <string name="menu_logout">Odhlásit</string>
     <string name="title_activity_login">Přihlášení</string>

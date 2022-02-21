@@ -29,17 +29,28 @@ class MatchesRepository(private val database: MainDatabase, private val matchId:
 
     suspend fun refreshMatches() {
         withContext(Dispatchers.IO) {
-            val playlist = MatchNetwork.matches.getMatches()
-            database.matchDao.insertAll(playlist.asDatabaseModel())
+            val matches = MatchNetwork.matches.getMatches()
+            database.matchDao.insertAll(matches.asDatabaseModel())
             Log.i("MY_INFO", "DATA OF ALL MATCHES WRITTEN TO THE DATABASE")
         }
     }
 
     suspend fun refreshMatchDetail(id:String) {
         withContext(Dispatchers.IO) {
-            val playlist = MatchNetwork.match.getMatchDetail(id)
-            database.matchDao.insertAll(playlist.asDatabaseModel())
+            val matches = MatchNetwork.match.getMatchDetail(id)
+            database.matchDao.insertAll(matches.asDatabaseModel())
             Log.i("MY_INFO", "DATA OF SINGLE MATCH WITH ID $id WRITTEN TO THE DATABASE")
+
+        }
+    }
+
+    suspend fun insertNewMatch(match: Match) {
+        withContext(Dispatchers.IO) {
+            //val matches = MatchNetwork.match.getMatchDetail(id)
+            MatchNetwork.match.insertNewMatch(match.homePlayer,match.visitorPlayer)
+            val matches = MatchNetwork.matches.getMatches()
+            database.matchDao.insertAll(matches.asDatabaseModel())
+            Log.i("MY_INFO", "NEW MATCH WRITTEN TO DATABASE")
 
         }
     }

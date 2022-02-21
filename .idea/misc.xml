@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/inComputer/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_spinner_dropdown_item.xml" value="0.18802083333333333" />
+        <entry key="..\:/Users/inComputer/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_spinner_item.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/inComputer/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/test_list_item.xml" value="0.358695652173913" />
         <entry key="..\:/Users/inComputer/Desktop/RespectSports/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.196" />
         <entry key="..\:/Users/inComputer/Desktop/RespectSports/app/src/main/res/drawable/baseline_power_settings_new_24.xml" value="0.1955" />
@@ -15,6 +17,7 @@
         <entry key="..\:/Users/inComputer/Desktop/RespectSports/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.196" />
         <entry key="..\:/Users/inComputer/Desktop/RespectSports/app/src/main/res/drawable/ic_menu_table_tennis.xml" value="0.1955" />
         <entry key="..\:/Users/inComputer/Desktop/RespectSports/app/src/main/res/drawable/side_nav_bar.xml" value="0.196" />
+        <entry key="..\:/Users/inComputer/Desktop/RespectSports/app/src/main/res/layout-v27/fragment_table_tennis_new_match.xml" value="0.27993779160186627" />
         <entry key="..\:/Users/inComputer/Desktop/RespectSports/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.12081659973226239" />
         <entry key="..\:/Users/inComputer/Desktop/RespectSports/app/src/main/res/layout-w936dp/activity_login.xml" value="0.2" />
         <entry key="..\:/Users/inComputer/Desktop/RespectSports/app/src/main/res/layout/activity_login.xml" value="0.18802083333333333" />
@@ -29,6 +32,7 @@
         <entry key="..\:/Users/inComputer/Desktop/RespectSports/app/src/main/res/layout/fragment_slideshow.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/inComputer/Desktop/RespectSports/app/src/main/res/layout/fragment_table_tennis.xml" value="0.25" />
         <entry key="..\:/Users/inComputer/Desktop/RespectSports/app/src/main/res/layout/fragment_table_tennis_match.xml" value="0.1875" />
+        <entry key="..\:/Users/inComputer/Desktop/RespectSports/app/src/main/res/layout/fragment_table_tennis_new_match.xml" value="0.25" />
         <entry key="..\:/Users/inComputer/Desktop/RespectSports/app/src/main/res/layout/grid_item.xml" value="0.33" />
         <entry key="..\:/Users/inComputer/Desktop/RespectSports/app/src/main/res/layout/nav_header_main.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/inComputer/Desktop/RespectSports/app/src/main/res/menu/activity_main_drawer.xml" value="0.67" />
