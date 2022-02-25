@@ -27,9 +27,9 @@ class MatchesRepository(private val database: MainDatabase, private val matchId:
     }
 
 
-    suspend fun refreshMatches() {
+    suspend fun refreshMatches(userId:String,userToken:String) {
         withContext(Dispatchers.IO) {
-            val matches = MatchNetwork.matches.getMatches()
+            val matches = MatchNetwork.matches.getMatches(userId,userToken)
             database.matchDao.insertAll(matches.asDatabaseModel())
             Log.i("MY_INFO", "DATA OF ALL MATCHES WRITTEN TO THE DATABASE")
         }
@@ -44,11 +44,11 @@ class MatchesRepository(private val database: MainDatabase, private val matchId:
         }
     }
 
-    suspend fun insertNewMatch(match: Match) {
+    suspend fun insertNewMatch(match: Match, userId: String,userToken: String) {
         withContext(Dispatchers.IO) {
             //val matches = MatchNetwork.match.getMatchDetail(id)
             MatchNetwork.match.insertNewMatch(match.homePlayer,match.visitorPlayer)
-            val matches = MatchNetwork.matches.getMatches()
+            val matches = MatchNetwork.matches.getMatches(userId, userToken)
             database.matchDao.insertAll(matches.asDatabaseModel())
             Log.i("MY_INFO", "NEW MATCH WRITTEN TO DATABASE")
 

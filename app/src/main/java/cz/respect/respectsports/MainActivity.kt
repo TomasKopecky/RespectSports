@@ -17,13 +17,15 @@ import com.google.android.material.snackbar.Snackbar
 import cz.respect.respectsports.databinding.ActivityMainBinding
 import cz.respect.respectsports.databinding.NavHeaderMainBinding
 import cz.respect.respectsports.ui.tableTennis.TableTennisMatchViewModel
+import cz.respect.respectsports.ui.tableTennis.TableTennisViewModel
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-    public var user: String = "blablablabla"
+    var userId: String = ""
+    var userToken: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,9 +89,15 @@ class MainActivity : AppCompatActivity() {
             val viewHeader = binding.navView.getHeaderView(0)
             val navViewHeaderBinding: NavHeaderMainBinding = NavHeaderMainBinding.bind(viewHeader)
             navViewHeaderBinding.username = it
-            user = it
         }
 
+        intent.getStringExtra("userId")?.let {
+            userId = it
+        }
+
+        intent.getStringExtra("userToken")?.let {
+            userToken = it
+        }
         /*
         binding.navView.menu.getItem(3).setOnMenuItemClickListener {
             Log.i("MY_INFO", "Logout run")
@@ -127,9 +135,29 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
+    class TableTennisViewModelFactory(
+        private val app: Application,
+        private val userId: String,
+        private val userToken: String)
+        : ViewModelProvider.Factory {
+
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+
+            if (modelClass.isAssignableFrom(
+                    TableTennisViewModel::class.java)) {
+
+                return TableTennisViewModel(app,userId,userToken) as T
+            }
+
+            throw IllegalArgumentException("Unknown ViewModel class")
+        }
+    }
+
     class TableTennisMatchViewModelFactory(
         private val app: Application,
-        private val id: String)
+        private val matchId: String,
+        private val userId: String,
+        private val userToken: String)
         : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -137,7 +165,7 @@ class MainActivity : AppCompatActivity() {
             if (modelClass.isAssignableFrom(
                     TableTennisMatchViewModel::class.java)) {
 
-                return TableTennisMatchViewModel(app,id) as T
+                return TableTennisMatchViewModel(app,matchId,userId,userToken) as T
             }
 
             throw IllegalArgumentException("Unknown ViewModel class")

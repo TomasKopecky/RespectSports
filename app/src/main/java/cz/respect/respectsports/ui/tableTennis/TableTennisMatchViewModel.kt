@@ -5,13 +5,12 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.squareup.moshi.JsonDataException
 import cz.respect.respectsports.database.getMainDatabase
-import cz.respect.respectsports.domain.Match
 import cz.respect.respectsports.repository.MatchesRepository
 import kotlinx.coroutines.launch
 import java.io.IOException
 
 
-class TableTennisMatchViewModel(application: Application, id: String) : AndroidViewModel(application) {
+class TableTennisMatchViewModel(application: Application, matchId: String, userId: String, userToken: String) : AndroidViewModel(application) {
 
     private val _text = MutableLiveData<String>().apply {
         value = "Detail zápasu"
@@ -22,7 +21,7 @@ class TableTennisMatchViewModel(application: Application, id: String) : AndroidV
 
     val message : MutableLiveData<String> = _message
 
-    val matchesRepository = MatchesRepository(getMainDatabase(application),id)
+    val matchesRepository = MatchesRepository(getMainDatabase(application),matchId)
 
     val match = matchesRepository.match
 
@@ -34,9 +33,9 @@ class TableTennisMatchViewModel(application: Application, id: String) : AndroidV
 
     //val match = matchesRepository.match
     init {
-        Log.i("MY_INFO", "FINALLY: " + id)
+        Log.i("MY_INFO", "FINALLY: " + matchId)
 
-        refreshMatchDetailFromRepository(id)
+        refreshMatchDetailFromRepository(matchId)
     }
     fun refreshMatchDetailFromRepository(id:String) {
 

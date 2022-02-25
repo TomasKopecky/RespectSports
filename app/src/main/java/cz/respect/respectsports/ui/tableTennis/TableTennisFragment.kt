@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import cz.respect.respectsports.MainActivity
 import cz.respect.respectsports.databinding.FragmentTableTennisBinding
 import cz.respect.respectsports.domain.Match
 
@@ -66,8 +67,8 @@ class TableTennisFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val galleryViewModel =
-            ViewModelProvider(this).get(TableTennisViewModel::class.java)
+        val galleryViewModel = MainActivity.TableTennisViewModelFactory(requireActivity().application,(activity as? MainActivity)!!.userId,(activity as? MainActivity)!!.userToken).create(TableTennisViewModel::class.java)
+            //ViewModelProvider(this).get(TableTennisViewModel::class.java)
 
         _binding = FragmentTableTennisBinding.inflate(inflater, container, false)
         val root: View = binding.root

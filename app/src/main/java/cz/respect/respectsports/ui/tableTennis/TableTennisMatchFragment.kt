@@ -9,8 +9,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import cz.respect.respectsports.MainActivity
 import cz.respect.respectsports.R
@@ -39,9 +37,9 @@ class TableTennisMatchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val id = args.id
+        val matchId = args.id
 
-        val tableTennisMatchViewModel = MainActivity.TableTennisMatchViewModelFactory(requireActivity().application,id).create(TableTennisMatchViewModel::class.java)
+        val tableTennisMatchViewModel = MainActivity.TableTennisMatchViewModelFactory(requireActivity().application,matchId,"","").create(TableTennisMatchViewModel::class.java)
         //    activity?.let { MainActivity.TableTennisMatchViewModelFactory(it.application,id) }
         //ViewModelProvider(this)[TableTennisMatchViewModel::class.java]
 
@@ -70,7 +68,7 @@ class TableTennisMatchFragment : Fragment() {
 
 
 
-        Log.i("MY_INFO", "MATCH DETAIL - PARAMETER = $id")
+        Log.i("MY_INFO", "MATCH DETAIL - PARAMETER = $matchId")
 
         //tableTennisMatchViewModel.matchId = id
 

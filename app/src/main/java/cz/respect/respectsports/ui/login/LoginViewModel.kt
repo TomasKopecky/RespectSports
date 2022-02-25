@@ -10,6 +10,7 @@ import cz.respect.respectsports.data.LoginRepository
 import cz.respect.respectsports.R
 import cz.respect.respectsports.database.getMainDatabase
 import cz.respect.respectsports.repository.UserRepository
+import cz.respect.respectsports.ui.encryption.DataEncryption
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -29,12 +30,16 @@ class LoginViewModel (private val loginRepository: LoginRepository, application:
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
+    private val _loggedUserValidToken = MutableLiveData<Boolean>()
+    val loggedUserValidToken: LiveData<Boolean> = _loggedUserValidToken
+
+
     private fun refreshUserFromRepository(username: String, password: String) {
         viewModelScope.launch {
             try {
                 userRepository.refreshUser(username, password)
                 //message.value = "LOGIN OK"
-                _loginResult.value = LoginResult(success = LoggedInUserView(displayName = username))
+                //_loginResult.value = LoginResult(success = LoggedInUserView(displayName = username))
                 Log.i("MY_INFO", "SUCCESS3")
                 //message.value = "DATA NAČTENA Z INTERNETU"
                 //_eventNetworkError.value = false
@@ -66,8 +71,38 @@ class LoginViewModel (private val loginRepository: LoginRepository, application:
         }
     }
 
+    private fun checkValidToken(token:String) {
+        viewModelScope.launch {
+            try {
+                userRepository.checkValidToken(token)
+                _loginResult.value = LoginResult(success = LoggedInUserView(displayName = loggedUser.value!!.name!!))
+                Log.i("MY_INFO", "TOKEN VALIDATION SUCCESS3")
 
+            } catch (networkError: IOException) {
+                Log.i("MY_INFO", "ERROR1")
+                message.value = "Chyba při ověřování tokenu - server nedostupný"
+                // Show a Toast error message and hide the progress bar.
+                if (loggedUser.value?.id.isNullOrEmpty()) {
+                    //message.value = "CHYBA PŘIPOJENÍ K INTERNETU"
+                    Log.i("MY_INFO", "NETWORK CONNECTION AND DATABASE ERROR - NO DATA OBTAINED: " + networkError.message)
+                } else {
+                    //message.value = "CHYBA PŘIPOJENÍ K INTERNETU - DATA NAČTENA Z DATABÁZE"
+                    Log.i("MY_INFO", "NETWORK CONNECTION ERROR - DATA OBTAINED FROM THE DATABASE" +  networkError.message)
+                }
+                //_eventNetworkError.value = true
+            }
 
+            catch (serverError: HttpException) {
+                Log.i("MY_INFO", "NETWORK HTTP CONNECTION ERROR - NO DATA OBTAINED: " + serverError.message)
+                message.value = "Neplatný token"
+            }
+
+            catch (dataStructureError: JsonDataException) {
+                Log.i("MY_INFO", "JSON PARSING ERROR " + dataStructureError.message)
+                message.value = "Chyba při ověřování tokenu - server odpověděl chybně"
+            }
+        }
+    }
 
     fun login(username: String, password: String) {
         // can be launched in a separate asynchronous job
@@ -83,6 +118,10 @@ class LoginViewModel (private val loginRepository: LoginRepository, application:
         }
 
  */
+    }
+
+    fun checkToken(token: String) {
+        checkValidToken(token)
     }
 
     fun loginDataChanged(username: String, password: String) {
