@@ -10,6 +10,7 @@ import cz.respect.respectsports.data.LoginRepository
  * ViewModel provider factory to instantiate LoginViewModel.
  * Required given LoginViewModel has a non-empty constructor
  */
+/*
 class LoginViewModelFactory(val app: Application) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
@@ -24,3 +25,4 @@ class LoginViewModelFactory(val app: Application) : ViewModelProvider.Factory {
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
+ */

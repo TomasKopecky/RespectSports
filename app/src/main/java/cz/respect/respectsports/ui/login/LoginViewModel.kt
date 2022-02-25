@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
-class LoginViewModel (private val loginRepository: LoginRepository, application: Application) : AndroidViewModel(application) {
+class LoginViewModel (application: Application) : AndroidViewModel(application) {
 
     private val _message = MutableLiveData<String>()
 

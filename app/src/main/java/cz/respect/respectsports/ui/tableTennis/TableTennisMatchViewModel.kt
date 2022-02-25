@@ -45,7 +45,7 @@ class TableTennisMatchViewModel(application: Application, matchId: String, userI
         //matchId?.let { Log.i("MY_INFO", it) }
         viewModelScope.launch {
             try {
-                matchesRepository.refreshMatchDetail(id)
+                matchesRepository.refreshMatchDetail(id,id)
                 //Log.i("MY_INFO", "MATCH DETAIL SUCCESS" + match.value)
                 message.value = "DATA NAČTENA Z INTERNETU"
                 //_eventNetworkError.value = false
@@ -66,6 +66,7 @@ class TableTennisMatchViewModel(application: Application, matchId: String, userI
             catch (serverError: retrofit2.HttpException) {
                 message.value = "Chyba při stahování zápasů - server vrátil chybu"
                 Log.i("MY_INFO", serverError.message())
+
             }
             catch (dataStructureError: JsonDataException) {
                 message.value = "Chyba při stahování zápasů - server odpověděl chybně"

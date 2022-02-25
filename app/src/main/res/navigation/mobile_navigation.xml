@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_new_match"
             app:destination="@id/table_tennis_new_match" />
+        <action
+            android:id="@+id/action_logout"
+            app:destination="@id/nav_logout" />
     </fragment>
 
 <fragment

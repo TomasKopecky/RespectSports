@@ -11,6 +11,7 @@ import cz.respect.respectsports.domain.Match
 //import cz.respect.respectsports.network.DevByteNetwork
 import cz.respect.respectsports.network.MatchNetwork
 import cz.respect.respectsports.network.asDatabaseModel
+import cz.respect.respectsports.ui.encryption.DataEncryption
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -27,17 +28,18 @@ class MatchesRepository(private val database: MainDatabase, private val matchId:
     }
 
 
-    suspend fun refreshMatches(userId:String,userToken:String) {
+    suspend fun refreshMatches(userToken:String) {
         withContext(Dispatchers.IO) {
-            val matches = MatchNetwork.matches.getMatches(userId,userToken)
+            val encryptor = DataEncryption
+            val matches = MatchNetwork.matches.getMatches(encryptor.decrypt(userToken))
             database.matchDao.insertAll(matches.asDatabaseModel())
             Log.i("MY_INFO", "DATA OF ALL MATCHES WRITTEN TO THE DATABASE")
         }
     }
 
-    suspend fun refreshMatchDetail(id:String) {
+    suspend fun refreshMatchDetail(token: String, id:String) {
         withContext(Dispatchers.IO) {
-            val matches = MatchNetwork.match.getMatchDetail(id)
+            val matches = MatchNetwork.match.getMatchDetail(token,id)
             database.matchDao.insertAll(matches.asDatabaseModel())
             Log.i("MY_INFO", "DATA OF SINGLE MATCH WITH ID $id WRITTEN TO THE DATABASE")
 
@@ -46,9 +48,10 @@ class MatchesRepository(private val database: MainDatabase, private val matchId:
 
     suspend fun insertNewMatch(match: Match, userId: String,userToken: String) {
         withContext(Dispatchers.IO) {
+            val encryptor = DataEncryption
             //val matches = MatchNetwork.match.getMatchDetail(id)
             MatchNetwork.match.insertNewMatch(match.homePlayer,match.visitorPlayer)
-            val matches = MatchNetwork.matches.getMatches(userId, userToken)
+            val matches = MatchNetwork.matches.getMatches(encryptor.decrypt(userToken))
             database.matchDao.insertAll(matches.asDatabaseModel())
             Log.i("MY_INFO", "NEW MATCH WRITTEN TO DATABASE")
 

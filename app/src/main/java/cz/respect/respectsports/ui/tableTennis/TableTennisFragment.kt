@@ -11,12 +11,13 @@ import android.widget.GridView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import cz.respect.respectsports.MainActivity
 import cz.respect.respectsports.databinding.FragmentTableTennisBinding
 import cz.respect.respectsports.domain.Match
+import cz.respect.respectsports.ui.logout.LogoutFragment
 
 
 class TableTennisFragment : Fragment() {
@@ -67,7 +68,7 @@ class TableTennisFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val galleryViewModel = MainActivity.TableTennisViewModelFactory(requireActivity().application,(activity as? MainActivity)!!.userId,(activity as? MainActivity)!!.userToken).create(TableTennisViewModel::class.java)
+        val tableTennisMatchesViewModel = MainActivity.TableTennisViewModelFactory(requireActivity().application,(activity as? MainActivity)!!.userId,(activity as? MainActivity)!!.userToken).create(TableTennisViewModel::class.java)
             //ViewModelProvider(this).get(TableTennisViewModel::class.java)
 
         _binding = FragmentTableTennisBinding.inflate(inflater, container, false)
@@ -75,29 +76,52 @@ class TableTennisFragment : Fragment() {
 
 
         //val textView: TextView = binding.textGallery
-        galleryViewModel.text.observe(viewLifecycleOwner) {
+        tableTennisMatchesViewModel.text.observe(viewLifecycleOwner) {
             //textView.text = it
         }
+
+        /*
+        tableTennisMatchesViewModel.loginResult.observe(viewLifecycleOwner) {
+            Log.i("MY_INFO", "LOGIN RECEIVED")
+            tableTennisMatchesViewModel.getMatches()
+        }
+
+         */
 
         binding.floatingActionButton3.setOnClickListener {
             findNavController().navigate(cz.respect.respectsports.R.id.action_new_match)
         }
 
-        //val textViewNew: TextView = binding.textsHome
-        galleryViewModel.matchesList.observe(viewLifecycleOwner) {
-            //textViewNew.text = it.toString()
 
-            //val itemArrayList: ArrayList<String> = arrayListOf()
-            val itemArrayList: ArrayList<Match> = arrayListOf()
-           // val matchesArray: List<Match> = arrayListOf(it)
-            for (match in it) {
-                itemArrayList.add(match)
-            }
-            //jj = it.toList()
-            setupGridView(itemArrayList, root)
+        //val textViewNew: TextView = binding.textsHome
+        tableTennisMatchesViewModel.matchesList.observe(viewLifecycleOwner) {
+            //textViewNew.text = it.toString()
+                //val itemArrayList: ArrayList<String> = arrayListOf()
+                val itemArrayList: ArrayList<Match> = arrayListOf()
+                // val matchesArray: List<Match> = arrayListOf(it)
+                for (match in it) {
+                    itemArrayList.add(match)
+                }
+                //jj = it.toList()
+                setupGridView(itemArrayList, root)
         }
 
-        galleryViewModel.message.observe(viewLifecycleOwner, Observer {
+        tableTennisMatchesViewModel.tokenError.observe(viewLifecycleOwner) {
+            showResultMessage("Chyba při ověření uživatele")
+            /*
+            val newFragment: Fragment = LogoutFragment()
+            val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
+            transaction.replace(cz.respect.respectsports.R.id.table_tennis_match, newFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+
+             */
+            //val action = TableTennisFragmentDirections.navigateToMatchDetail()
+            //findNavController().navigate(action)
+            findNavController().navigate(cz.respect.respectsports.R.id.action_logout)
+        }
+
+        tableTennisMatchesViewModel.message.observe(viewLifecycleOwner, Observer {
             showResultMessage(it)
         })
 

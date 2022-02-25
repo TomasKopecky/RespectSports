@@ -65,7 +65,7 @@ class LoginActivity : AppCompatActivity() {
             loading.visibility = View.INVISIBLE
         }
 
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory(application))
+        loginViewModel = ViewModelProvider(this)
             .get(LoginViewModel::class.java)
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {

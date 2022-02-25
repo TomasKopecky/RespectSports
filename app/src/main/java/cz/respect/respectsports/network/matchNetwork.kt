@@ -61,10 +61,11 @@ fun NetworkMatchContainer.asDatabaseModel(): List<DatabaseMatch> {
 interface MatchService {
     @FormUrlEncoded
     @POST(NetworkConstants.MATCHES_URL)
-    suspend fun getMatches(@Field("userId") userId: String, @Field("userToken") userToken: String): NetworkMatchContainer
+    suspend fun getMatches(@Field("token") token: String): NetworkMatchContainer
 
-    @GET(NetworkConstants.MATCH_DETAIL_URL+"/{id}")
-    suspend fun getMatchDetail(@Path("id") id: String): NetworkMatchContainer
+    @FormUrlEncoded
+    @POST(NetworkConstants.MATCH_DETAIL_URL+"/{id}")
+    suspend fun getMatchDetail(@Field("token") userToken: String, @Path("id") matchId: String): NetworkMatchContainer
 
     @FormUrlEncoded
     @POST(NetworkConstants.MATCH_INSERT_URL)

@@ -46,24 +46,44 @@ class TableTennisNewMatchFragment : Fragment() {
 
         tableTennisNewMatchViewModel.players.observe(viewLifecycleOwner) {
             val players: MutableList<Player> = ArrayList()
-            val adapter: ArrayAdapter<Player>
+            val homePlayer: MutableList<Player> = ArrayList()
+            val otherPlayers: MutableList<Player> = ArrayList()
+
+            val visitorAdapter: ArrayAdapter<Player>
+
+            val homeAdapter: ArrayAdapter<Player>
             players.addAll(it)
+
+            players.forEach { player ->
+                if (player.id == (activity as? MainActivity)!!.userId) {
+                    homePlayer.add(player)
+                }
+                else {
+                    otherPlayers.add(player)
+                }
+            }
             //list.add("Michal Novák")
             //list.add("Item 2")
             //list.add("Item 3")
 
-            adapter = ArrayAdapter(
+            homeAdapter = ArrayAdapter(
                 requireContext().applicationContext,
-                android.R.layout.simple_spinner_item, players
+                android.R.layout.simple_spinner_item, homePlayer
             )
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            visitorAdapter = ArrayAdapter(
+                requireContext().applicationContext,
+                android.R.layout.simple_spinner_item, otherPlayers
+            )
+
+            homeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            visitorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             val homeSpinner = binding.homeSpinner
             val visitorSpinner = binding.visitorSpinner
             if (homeSpinner != null) {
-                homeSpinner.setAdapter(adapter)
+                homeSpinner.setAdapter(homeAdapter)
             }
             if (visitorSpinner != null) {
-                visitorSpinner.setAdapter(adapter)
+                visitorSpinner.setAdapter(visitorAdapter)
             }
 
             Log.i("MY_INFO", "PLAYERS: " + it.toString())
