@@ -33,9 +33,6 @@ fun NetworkUserContainer.asDomainModel(): User {
  */
 fun NetworkUserContainer.asDatabaseModel(): DatabaseUser {
     val encryption = DataEncryption
-    Log.i("MY_INFO", "RAW TOKEN: " + user.token)
-    Log.i("MY_INFO", "ENCRYPTED TOKEN: " + encryption.encrypt(user.token))
-    Log.i("MY_INFO", "DECRYPTED TOKEN: " + encryption.decrypt(encryption.encrypt(user.token)))
     return DatabaseUser(user.id,user.name,encryption.encrypt(user.token))
 }
 /**
