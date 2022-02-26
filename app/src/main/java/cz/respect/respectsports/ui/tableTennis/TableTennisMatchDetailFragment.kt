@@ -1,5 +1,6 @@
 package cz.respect.respectsports.ui.tableTennis
 
+import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -54,14 +55,7 @@ class TableTennisMatchDetailFragment : Fragment() {
             binding.homePlayerName = it[0].homePlayerName
             binding.visitorPlayerName = it[0].visitorPlayerName
             binding.result =  it[0].result
-            binding.date =  it[0].date
-
-        }
-
-        tableTennisMatchDetailViewModel.match.observe(viewLifecycleOwner) {
-            Log.i("MY_INFO","MATCH GOOOOOOOOOOOOT: " + it.toString())
-            binding.result = it[0].result
-            //binding.detailResult.text = it[0].id
+            binding.date =  SimpleDateFormat("d.M.yyyy").format(it[0].date.toDouble().toLong()).toString()
         }
 
 

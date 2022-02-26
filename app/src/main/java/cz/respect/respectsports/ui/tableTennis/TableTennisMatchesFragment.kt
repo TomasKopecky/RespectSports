@@ -1,6 +1,7 @@
 package cz.respect.respectsports.ui.tableTennis
 
 import android.R
+import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +18,8 @@ import androidx.navigation.fragment.findNavController
 import cz.respect.respectsports.MainActivity
 import cz.respect.respectsports.databinding.FragmentTableTennisMatchesBinding
 import cz.respect.respectsports.domain.Match
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class TableTennisMatchesFragment : Fragment() {
@@ -72,7 +75,6 @@ class TableTennisMatchesFragment : Fragment() {
 
         _binding = FragmentTableTennisMatchesBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
 
         //val textView: TextView = binding.textGallery
         tableTennisMatchesViewModel.text.observe(viewLifecycleOwner) {

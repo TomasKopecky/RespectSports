@@ -16,9 +16,9 @@
         tools:context=".ui.home.HomeFragment">
 
         <TextView
-            android:id="@+id/detail_result"
+            android:id="@+id/match_result"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50sp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
@@ -41,11 +41,54 @@
             android:textAlignment="center"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/detail_result"
-            app:layout_constraintHorizontal_bias="0.585"
+            app:layout_constraintEnd_toEndOf="@+id/match_result"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.098" />
+            app:layout_constraintVertical_bias="0.1" />
+
+        <TextView
+            android:id="@+id/visitor_player_label"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:text="@string/visitor_player_label"
+            android:gravity="top|center"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/match_result"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.447" />
+
+        <TextView
+            android:id="@+id/date_label"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:gravity="bottom|center"
+            android:text="@string/date_label"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/match_result"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.604" />
+
+        <TextView
+            android:id="@+id/home_player_label"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:text="@string/home_player_label"
+            android:gravity="bottom|center"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/match_result"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.041" />
 
         <TextView
             android:id="@+id/visitor_player"
@@ -55,7 +98,7 @@
             android:textAlignment="center"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/detail_result"
+            app:layout_constraintEnd_toEndOf="@+id/match_result"
             app:layout_constraintHorizontal_bias="0.6"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -69,11 +112,11 @@
             android:textAlignment="center"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/detail_result"
-            app:layout_constraintHorizontal_bias="0.515"
+            app:layout_constraintEnd_toEndOf="@+id/match_result"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.548" />
+            app:layout_constraintVertical_bias="0.655" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

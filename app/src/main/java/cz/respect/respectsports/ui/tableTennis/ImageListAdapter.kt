@@ -1,6 +1,8 @@
 package cz.respect.respectsports.ui.tableTennis
 
 import android.content.Context
+import android.icu.text.SimpleDateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,17 +37,16 @@ internal class ImageListAdapter internal constructor(
             holder.homePlayerName = itemBinding.homePlayerName
             holder.visitorPlayerName = itemBinding.visitorPlayerName
             holder.result = itemBinding.result
-            //holder.icon = itemBinding.icon
             convertView.tag = holder
         } else {
             holder = convertView.tag as ItemViewHolder
         }
+
         //holder.id!!.text = this.itemList!![position].id
-        holder.date!!.text = this.itemList!![position].date
+        holder.date!!.text = SimpleDateFormat("d.M.yyyy").format( this.itemList!![position].date.toDouble().toLong()).toString()//this.itemList!![position].date
         holder.homePlayerName!!.text = this.itemList!![position].homePlayerName
         holder.visitorPlayerName!!.text = this.itemList!![position].visitorPlayerName
         holder.result!!.text = this.itemList!![position].result
-        //holder.icon!!.setImageResource(R.mipmap.ic_launcher)
         return convertView
     }
 

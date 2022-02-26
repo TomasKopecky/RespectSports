@@ -13,6 +13,8 @@ import cz.respect.respectsports.domain.Match
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 data class NetworkMatchContainer(val matches: List<NetworkMatch>)
 
@@ -22,13 +24,13 @@ data class NetworkMatchContainer(val matches: List<NetworkMatch>)
 @JsonClass(generateAdapter = true)
 data class NetworkMatch(
     val id: String,
-    val date: String,
+    val date: Long,
     val homePlayerId: String,
-    val homePlayerName: String,
-    val homePlayerUsername: String,
+    val homePlayerName: String?,
+    val homePlayerUsername: String?,
     val visitorPlayerId: String,
-    val visitorPlayerName: String,
-    val visitorPlayerUsername: String,
+    val visitorPlayerName: String?,
+    val visitorPlayerUsername: String?,
     val result: String)
 
 /**
@@ -45,8 +47,7 @@ fun NetworkMatchContainer.asDomainModel(): List<Match> {
             visitorPlayerId = it.visitorPlayerId,
             visitorPlayerName = it.visitorPlayerName,
             visitorPlayerUsername = it.visitorPlayerUsername,
-            result = it.result
-            )
+            result = it.result)
     }
 }
 
@@ -81,7 +82,7 @@ interface MatchService {
 
     @FormUrlEncoded
     @POST(NetworkConstants.MATCH_INSERT_URL)
-    suspend fun insertNewMatch(@Field("token") token: String, @Field("homePlayerId") homePLayerId: String, @Field("visitorPlayerId") visitorPlayerId: String,  @Field("matchResult") matchResult: String,  @Field("matchDate") matchDate: String): NetworkMatchContainer
+    suspend fun insertNewMatch(@Field("token") token: String, @Field("homePlayerId") homePLayerId: String, @Field("visitorPlayerId") visitorPlayerId: String,  @Field("result") matchResult: String,  @Field("date") matchDate: Long): NetworkMatchContainer
 }
 
 /**

@@ -1,9 +1,10 @@
 package cz.respect.respectsports.database
 
 import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import android.util.Log
+import androidx.room.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Database(entities = [DatabaseUser::class, DatabaseMatch::class, DatabasePlayer::class], version = 1, exportSchema = false)
 abstract class MainDatabase: RoomDatabase() {

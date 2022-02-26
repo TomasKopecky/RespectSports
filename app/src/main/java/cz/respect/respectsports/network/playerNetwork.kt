@@ -45,8 +45,9 @@ fun NetworkPlayerContainer.asDatabaseModel(): List<DatabasePlayer> {
 }
 
 interface PlayerService {
-    @GET(NetworkConstants.GET_ALL_PLAYERS_URL)
-    suspend fun getPlayers(): NetworkPlayerContainer
+    @FormUrlEncoded
+    @POST(NetworkConstants.GET_ALL_PLAYERS_URL)
+    suspend fun getPlayers(@Field("token") token: String): NetworkPlayerContainer
 
 }
 

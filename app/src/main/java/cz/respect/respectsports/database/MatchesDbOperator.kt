@@ -3,13 +3,15 @@ package cz.respect.respectsports.database
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import cz.respect.respectsports.domain.Match
+import java.text.SimpleDateFormat
+import java.util.*
 
 @Dao
 interface MatchDao {
-    @Query("select * from matches order by date")
+    @Query("SELECT * FROM matches ORDER BY date DESC")
     fun getMatches(): LiveData<List<DatabaseMatch>>
 
-    @Query("select * from matches where id=:id")
+    @Query("SELECT * FROM matches WHERE id=:id")
     fun getMatchDetail(id: String?): LiveData<List<DatabaseMatch>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -20,19 +22,20 @@ interface MatchDao {
 data class DatabaseMatch constructor(
     @PrimaryKey
     val id: String,
-    val date: String,
+    val date: Long,
     val homePlayerId: String,
-    val homePlayerName: String,
-    val homePlayerUsername: String,
-    val visitorPlayerId: String?,
-    val visitorPlayerName: String,
-    val visitorPlayerUsername: String,
+    val homePlayerName: String?,
+    val homePlayerUsername: String?,
+    val visitorPlayerId: String,
+    val visitorPlayerName: String?,
+    val visitorPlayerUsername: String?,
     val result: String)
 
 /**
  * Map Database matches to domain entities
  */
 fun List<DatabaseMatch>.asDomainModel(): List<Match> {
+
     return map {
         Match(
             id = it.id,
