@@ -23,9 +23,10 @@ data class DatabaseUser constructor(
     @PrimaryKey
     val id: String,
     val name: String,
+    val username: String,
     val token: String)
 
 
 fun DatabaseUser.asDomainModel(): User {
-    return User(id = id,name = name,token = token)
+    return User(id = id,name = name,username=username,token = token)
 }

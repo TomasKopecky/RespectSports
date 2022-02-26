@@ -23,8 +23,12 @@ data class NetworkMatchContainer(val matches: List<NetworkMatch>)
 data class NetworkMatch(
     val id: String,
     val date: String,
-    val homePlayer: String,
-    val visitorPlayer: String,
+    val homePlayerId: String,
+    val homePlayerName: String,
+    val homePlayerUsername: String,
+    val visitorPlayerId: String,
+    val visitorPlayerName: String,
+    val visitorPlayerUsername: String,
     val result: String)
 
 /**
@@ -35,8 +39,12 @@ fun NetworkMatchContainer.asDomainModel(): List<Match> {
         Match(
             id = it.id,
             date = it.date,
-            homePlayer = it.homePlayer,
-            visitorPlayer = it.visitorPlayer,
+            homePlayerId = it.homePlayerId,
+            homePlayerName = it.homePlayerName,
+            homePlayerUsername = it.homePlayerUsername,
+            visitorPlayerId = it.visitorPlayerId,
+            visitorPlayerName = it.visitorPlayerName,
+            visitorPlayerUsername = it.visitorPlayerUsername,
             result = it.result
             )
     }
@@ -52,8 +60,12 @@ fun NetworkMatchContainer.asDatabaseModel(): List<DatabaseMatch> {
         DatabaseMatch(
             id = it.id,
             date = it.date,
-            homePlayer = it.homePlayer,
-            visitorPlayer = it.visitorPlayer,
+            homePlayerId = it.homePlayerId,
+            homePlayerName = it.homePlayerName,
+            homePlayerUsername = it.homePlayerUsername,
+            visitorPlayerId = it.visitorPlayerId,
+            visitorPlayerName = it.visitorPlayerName,
+            visitorPlayerUsername = it.visitorPlayerUsername,
             result = it.result)
     }
 }
@@ -64,12 +76,12 @@ interface MatchService {
     suspend fun getMatches(@Field("token") token: String): NetworkMatchContainer
 
     @FormUrlEncoded
-    @POST(NetworkConstants.MATCH_DETAIL_URL+"/{id}")
-    suspend fun getMatchDetail(@Field("token") userToken: String, @Path("id") matchId: String): NetworkMatchContainer
+    @POST(NetworkConstants.MATCH_DETAIL_URL/*+"/{id}"*/)
+    suspend fun getMatchDetail(@Field("token") token: String, @Field("matchId") matchId: String): NetworkMatchContainer
 
     @FormUrlEncoded
     @POST(NetworkConstants.MATCH_INSERT_URL)
-    suspend fun insertNewMatch(@Field("homePlayerId") homePLayerId: String, @Field("visitorPlayerId") visitorPlayerId: String): NetworkUserContainer
+    suspend fun insertNewMatch(@Field("token") token: String, @Field("homePlayerId") homePLayerId: String, @Field("visitorPlayerId") visitorPlayerId: String,  @Field("matchResult") matchResult: String,  @Field("matchDate") matchDate: String): NetworkMatchContainer
 }
 
 /**

@@ -32,8 +32,8 @@ internal class ImageListAdapter internal constructor(
             holder = ItemViewHolder()
             //holder.id = itemBinding.id
             holder.date = itemBinding.date
-            holder.homePlayer = itemBinding.homePlayer
-            holder.visitorPlayer = itemBinding.visitorPlayer
+            holder.homePlayerName = itemBinding.homePlayerName
+            holder.visitorPlayerName = itemBinding.visitorPlayerName
             holder.result = itemBinding.result
             //holder.icon = itemBinding.icon
             convertView.tag = holder
@@ -42,8 +42,8 @@ internal class ImageListAdapter internal constructor(
         }
         //holder.id!!.text = this.itemList!![position].id
         holder.date!!.text = this.itemList!![position].date
-        holder.homePlayer!!.text = this.itemList!![position].homePlayer
-        holder.visitorPlayer!!.text = this.itemList!![position].visitorPlayer
+        holder.homePlayerName!!.text = this.itemList!![position].homePlayerName
+        holder.visitorPlayerName!!.text = this.itemList!![position].visitorPlayerName
         holder.result!!.text = this.itemList!![position].result
         //holder.icon!!.setImageResource(R.mipmap.ic_launcher)
         return convertView
@@ -52,8 +52,8 @@ internal class ImageListAdapter internal constructor(
     internal class ItemViewHolder {
         var id: TextView? = null
         var date: TextView? = null
-        var homePlayer: TextView? = null
-        var visitorPlayer: TextView? = null
+        var homePlayerName: TextView? = null
+        var visitorPlayerName: TextView? = null
         var result: TextView? = null
         //var icon: ImageView? = null
     }

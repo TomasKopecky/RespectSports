@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
-class TableTennisViewModel(application: Application, userId: String, userToken: String) : AndroidViewModel(application) {
+class TableTennisMatchesViewModel(application: Application, userId: String, userToken: String) : AndroidViewModel(application) {
 
     private val _text = MutableLiveData<String>().apply {
         value = "Zde bude seznam zápasů uživatele"
@@ -44,43 +44,6 @@ class TableTennisViewModel(application: Application, userId: String, userToken: 
         refreshMatchesFromRepository(userToken)
         //checkValidToken(userToken)
         //refreshMatchesFromRepository(userId,userToken)
-    }
-
-    fun getMatches() {
-        //refreshMatchesFromRepository(userId, userId)
-    }
-
-    private fun checkValidToken(token:String) {
-        viewModelScope.launch {
-            try {
-                userRepository.checkValidToken(token)
-                //_loginResult.value = true
-                Log.i("MY_INFO", "TOKEN VALIDATION SUCCESS3")
-
-            } catch (networkError: IOException) {
-                Log.i("MY_INFO", "ERROR1")
-                message.value = "Chyba při ověřování tokenu - server nedostupný"
-                // Show a Toast error message and hide the progress bar.
-                if (loggedUser.value?.id.isNullOrEmpty()) {
-                    //message.value = "CHYBA PŘIPOJENÍ K INTERNETU"
-                    Log.i("MY_INFO", "NETWORK CONNECTION AND DATABASE ERROR - NO DATA OBTAINED: " + networkError.message)
-                } else {
-                    //message.value = "CHYBA PŘIPOJENÍ K INTERNETU - DATA NAČTENA Z DATABÁZE"
-                    Log.i("MY_INFO", "NETWORK CONNECTION ERROR - DATA OBTAINED FROM THE DATABASE" +  networkError.message)
-                }
-                //_eventNetworkError.value = true
-            }
-
-            catch (serverError: HttpException) {
-                Log.i("MY_INFO", "NETWORK HTTP CONNECTION ERROR - NO DATA OBTAINED: " + serverError.message)
-                message.value = "Neplatný token"
-            }
-
-            catch (dataStructureError: JsonDataException) {
-                Log.i("MY_INFO", "JSON PARSING ERROR " + dataStructureError.message)
-                message.value = "Chyba při ověřování tokenu - server odpověděl chybně"
-            }
-        }
     }
 
 
@@ -115,7 +78,7 @@ class TableTennisViewModel(application: Application, userId: String, userToken: 
             catch (dataStructureError: JsonDataException) {
                 _tokenError.value = true
                 message.value = "Chyba při stahování zápasů - server odpověděl chybně"
-                dataStructureError.message?.let { Log.i("MY_INFO", it) }
+                dataStructureError.message?.let { Log.i("MY_INFO", "JSON ERROR: " + it) }
             }
         }
     }

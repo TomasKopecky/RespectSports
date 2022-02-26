@@ -28,30 +28,29 @@ class MatchesRepository(private val database: MainDatabase, private val matchId:
     }
 
 
-    suspend fun refreshMatches(userToken:String) {
+    suspend fun refreshMatches(token:String) {
         withContext(Dispatchers.IO) {
             val encryptor = DataEncryption
-            val matches = MatchNetwork.matches.getMatches(encryptor.decrypt(userToken))
+            val matches = MatchNetwork.matches.getMatches(encryptor.decrypt(token))
             database.matchDao.insertAll(matches.asDatabaseModel())
             Log.i("MY_INFO", "DATA OF ALL MATCHES WRITTEN TO THE DATABASE")
         }
     }
 
-    suspend fun refreshMatchDetail(token: String, id:String) {
+    suspend fun refreshMatchDetail(token: String,id:String) {
         withContext(Dispatchers.IO) {
-            val matches = MatchNetwork.match.getMatchDetail(token,id)
+            val encryptor = DataEncryption
+            val matches = MatchNetwork.match.getMatchDetail(encryptor.decrypt(token),id)
             database.matchDao.insertAll(matches.asDatabaseModel())
             Log.i("MY_INFO", "DATA OF SINGLE MATCH WITH ID $id WRITTEN TO THE DATABASE")
 
         }
     }
 
-    suspend fun insertNewMatch(match: Match, userId: String,userToken: String) {
+    suspend fun insertNewMatch(match: Match, token: String) {
         withContext(Dispatchers.IO) {
             val encryptor = DataEncryption
-            //val matches = MatchNetwork.match.getMatchDetail(id)
-            MatchNetwork.match.insertNewMatch(match.homePlayer,match.visitorPlayer)
-            val matches = MatchNetwork.matches.getMatches(encryptor.decrypt(userToken))
+            val matches = MatchNetwork.matches.insertNewMatch(encryptor.decrypt(token),match.homePlayerId!!, match.visitorPlayerId!!,match.result, match.date)
             database.matchDao.insertAll(matches.asDatabaseModel())
             Log.i("MY_INFO", "NEW MATCH WRITTEN TO DATABASE")
 

@@ -13,11 +13,11 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.snackbar.Snackbar
 import cz.respect.respectsports.databinding.ActivityMainBinding
 import cz.respect.respectsports.databinding.NavHeaderMainBinding
-import cz.respect.respectsports.ui.tableTennis.TableTennisMatchViewModel
-import cz.respect.respectsports.ui.tableTennis.TableTennisViewModel
+import cz.respect.respectsports.ui.tableTennis.TableTennisMatchDetailViewModel
+import cz.respect.respectsports.ui.tableTennis.TableTennisNewMatchViewModel
+import cz.respect.respectsports.ui.tableTennis.TableTennisMatchesViewModel
 
 
 class MainActivity : AppCompatActivity() {
@@ -144,16 +144,22 @@ class MainActivity : AppCompatActivity() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
             if (modelClass.isAssignableFrom(
-                    TableTennisViewModel::class.java)) {
+                    TableTennisMatchesViewModel::class.java)) {
 
-                return TableTennisViewModel(app,userId,userToken) as T
+                return TableTennisMatchesViewModel(app,userId,userToken) as T
+            }
+
+            if (modelClass.isAssignableFrom(
+                    TableTennisNewMatchViewModel::class.java)) {
+
+                return TableTennisNewMatchViewModel(app,userId,userToken) as T
             }
 
             throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
 
-    class TableTennisMatchViewModelFactory(
+    class TableTennisMatchDetailViewModelFactory(
         private val app: Application,
         private val matchId: String,
         private val userId: String,
@@ -163,9 +169,9 @@ class MainActivity : AppCompatActivity() {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
             if (modelClass.isAssignableFrom(
-                    TableTennisMatchViewModel::class.java)) {
+                    TableTennisMatchDetailViewModel::class.java)) {
 
-                return TableTennisMatchViewModel(app,matchId,userId,userToken) as T
+                return TableTennisMatchDetailViewModel(app,matchId,userId,userToken) as T
             }
 
             throw IllegalArgumentException("Unknown ViewModel class")

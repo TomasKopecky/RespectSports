@@ -11,18 +11,17 @@ import android.widget.GridView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import cz.respect.respectsports.MainActivity
-import cz.respect.respectsports.databinding.FragmentTableTennisBinding
+import cz.respect.respectsports.databinding.FragmentTableTennisMatchesBinding
 import cz.respect.respectsports.domain.Match
-import cz.respect.respectsports.ui.logout.LogoutFragment
 
 
-class TableTennisFragment : Fragment() {
+class TableTennisMatchesFragment : Fragment() {
 
-    private var _binding: FragmentTableTennisBinding? = null
+    private var _binding: FragmentTableTennisMatchesBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -68,10 +67,10 @@ class TableTennisFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val tableTennisMatchesViewModel = MainActivity.TableTennisViewModelFactory(requireActivity().application,(activity as? MainActivity)!!.userId,(activity as? MainActivity)!!.userToken).create(TableTennisViewModel::class.java)
+        val tableTennisMatchesViewModel = MainActivity.TableTennisViewModelFactory(requireActivity().application,(activity as? MainActivity)!!.userId,(activity as? MainActivity)!!.userToken).create(TableTennisMatchesViewModel::class.java)
             //ViewModelProvider(this).get(TableTennisViewModel::class.java)
 
-        _binding = FragmentTableTennisBinding.inflate(inflater, container, false)
+        _binding = FragmentTableTennisMatchesBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
 
@@ -89,7 +88,8 @@ class TableTennisFragment : Fragment() {
          */
 
         binding.floatingActionButton3.setOnClickListener {
-            findNavController().navigate(cz.respect.respectsports.R.id.action_new_match)
+            val navController = Navigation.findNavController(requireView())
+            navController.navigate(cz.respect.respectsports.R.id.action_new_match)
         }
 
 
@@ -118,7 +118,8 @@ class TableTennisFragment : Fragment() {
              */
             //val action = TableTennisFragmentDirections.navigateToMatchDetail()
             //findNavController().navigate(action)
-            findNavController().navigate(cz.respect.respectsports.R.id.action_logout)
+            val action = TableTennisMatchesFragmentDirections.actionLogout()
+            findNavController().navigate(action)
         }
 
         tableTennisMatchesViewModel.message.observe(viewLifecycleOwner, Observer {
@@ -134,11 +135,12 @@ class TableTennisFragment : Fragment() {
         val mainAdapter = context?.let { ImageListAdapter(it.applicationContext,  R.layout.test_list_item, item) }
         //val adapter = activity?.let { ImageListAdapter(it.applicationContext, R.layout.test_list_item, itemList) }
         binding.myGrid.adapter = mainAdapter
+        //binding.myGrid.adapter = mainAdapter
 
         binding.myGrid.onItemClickListener =
             AdapterView.OnItemClickListener { parent, v, position, id ->
                 Log.i("MY_INFO", "id: ${item[position].id}")
-                val action = TableTennisFragmentDirections.navigateToMatchDetail(item[position].id)
+                val action = TableTennisMatchesFragmentDirections.navigateToMatchDetail(item[position].id!!)
                 findNavController().navigate(action)
                 /*
                 val matchDetailViewModel =

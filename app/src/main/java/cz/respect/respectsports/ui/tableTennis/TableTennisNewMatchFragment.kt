@@ -6,26 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.facebook.android.crypto.keychain.AndroidConceal
-import com.facebook.android.crypto.keychain.SharedPrefsBackedKeyChain
-import com.facebook.crypto.CryptoConfig
-import com.facebook.crypto.Entity
-import com.facebook.crypto.keychain.KeyChain
-import com.facebook.soloader.SoLoader
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.fragment.findNavController
 import cz.respect.respectsports.MainActivity
 import cz.respect.respectsports.R
 import cz.respect.respectsports.databinding.FragmentTableTennisNewMatchBinding
+import cz.respect.respectsports.domain.Match
 import cz.respect.respectsports.domain.Player
-import cz.respect.respectsports.ui.encryption.DataEncryption
 
 
 class TableTennisNewMatchFragment : Fragment() {
 
     private var _binding: FragmentTableTennisNewMatchBinding? = null
     private val binding get() = _binding!!
+    private var insertButtonClicked:Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +34,9 @@ class TableTennisNewMatchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val tableTennisNewMatchViewModel =
-            ViewModelProvider(this).get(TableTennisNewMatchViewModel::class.java)
+        val tableTennisNewMatchViewModel = MainActivity.TableTennisViewModelFactory(requireActivity().application,(activity as? MainActivity)!!.userId,(activity as? MainActivity)!!.userToken).create(TableTennisNewMatchViewModel::class.java)
+
+        //val tableTennisNewMatchViewModel = ViewModelProvider(this).get(TableTennisNewMatchViewModel::class.java)
 
         Log.i("MY_INFO","USER ID: "+(activity as? MainActivity)!!.userId)
         Log.i("MY_INFO","USER TOKEN: "+(activity as? MainActivity)!!.userToken)
@@ -86,32 +85,56 @@ class TableTennisNewMatchFragment : Fragment() {
                 visitorSpinner.setAdapter(visitorAdapter)
             }
 
+            tableTennisNewMatchViewModel.matches.observe(viewLifecycleOwner) {
+                Log.i("MY_INFO", "MATCH SUCCESSFULLY INSERTED - MATCHES")
+                if (insertButtonClicked) {
+                    insertButtonClicked = false
+                    Log.i("MY_INFO", "MATCH EDIT DONE - GET BACK")
+                    val action = TableTennisNewMatchFragmentDirections.actionNewMatchDone()
+                    findNavController().navigate(action)
+                }
+            }
+
             Log.i("MY_INFO", "PLAYERS: " + it.toString())
             binding.players.text = it.toString()
 
-            binding.llButton?.setOnClickListener {
-
-
-                /*
-                SoLoader.init(activity, false)
-                val keyChain: KeyChain = SharedPrefsBackedKeyChain(context, CryptoConfig.KEY_256)
-                val crypto = AndroidConceal.get().createDefaultCrypto(keyChain)
-                //if (crypto.isAvailable) {
-                val plainText: String = "MY_TEXT" //ByteArray(1024)
-                val entity = Entity.create("mytext")
-                val cipherText = crypto.encrypt(plainText.toByteArray(), entity)
-                val decipherText = crypto.decrypt(cipherText, entity)
-                Log.i("MY_INFO", "ENCRYPTED: " + cipherText.toString())
-                Log.i("MY_INFO", "DECRYPTED: " + decipherText.toString())
-
-                 */
-                //}
+            binding.matchInsertButton!!.setOnClickListener {
+                val homePlayer = binding.homeSpinner!!.selectedItem.equals(homeAdapter)
+                Log.i("MY_INFO", "HOME PLAYER" + homePlayer.toString())
+                val visitorPlayer = binding.visitorPlayer!!.text.toString()
+                val matchResult = binding.matchResult!!.text.toString()
+                val matchDate = binding.matchDate!!.text.toString()
+                if (homePlayer && visitorPlayer.length > 1 && matchResult.length > 2 && matchDate.length > 7) {
+                    val match = Match(null, matchDate, homePlayer.toString(), "", "", visitorPlayer, "","", matchResult)
+                    insertButtonClicked = true
+                    Log.i("MY_INFO", "INSERTING MATCH")
+                    tableTennisNewMatchViewModel.insertMatch(match)
+                    }
+                else {
+                    showResultMessage("Vyplňte všechny položky")
+                }
             }
+
+            tableTennisNewMatchViewModel.tokenError.observe(viewLifecycleOwner) {
+                Log.i("MY_INFO", "Chyba při ověření uživateleeee")
+                showResultMessage("Chyba při ověření uživatele")
+                //val action = TableTennisNewMatchFragmentDirections.actionLogout()
+                //findNavController().navigate(action)
+            }
+
         }
 
         (activity as AppCompatActivity?)!!.supportActionBar!!.title = getString(R.string.page_table_tennis_new_match)
 
         return root
+    }
+
+    private fun showResultMessage(apiResponseString:String) {
+        Toast.makeText(
+            activity,
+            apiResponseString,
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     override fun onDestroyView() {

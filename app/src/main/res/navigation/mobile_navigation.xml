@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/nav_table_tennis"
-        android:name="cz.respect.respectsports.ui.tableTennis.TableTennisFragment"
+        android:name="cz.respect.respectsports.ui.tableTennis.TableTennisMatchesFragment"
         android:label="@string/menu_table_tennis"
-        tools:layout="@layout/fragment_table_tennis" >
+        tools:layout="@layout/fragment_table_tennis_matches" >
     <action
         android:id="@+id/navigate_to_match_detail"
         app:destination="@id/table_tennis_match" />
@@ -39,8 +39,8 @@
 
     <fragment
         android:id="@+id/table_tennis_match"
-        android:name="cz.respect.respectsports.ui.tableTennis.TableTennisMatchFragment"
-        tools:layout="@layout/fragment_table_tennis_match" >
+        android:name="cz.respect.respectsports.ui.tableTennis.TableTennisMatchDetailFragment"
+        tools:layout="@layout/fragment_table_tennis_match_detail" >
         <argument
             android:name="id"
             app:argType="string" />
@@ -51,8 +51,11 @@
         android:name="cz.respect.respectsports.ui.tableTennis.TableTennisNewMatchFragment"
         tools:layout="@layout/fragment_table_tennis_new_match" >
         <action
-            android:id="@+id/action_from_new_match_back"
+            android:id="@+id/action_new_match_done"
             app:destination="@id/nav_table_tennis" />
+        <action
+            android:id="@+id/action_logout"
+            app:destination="@id/nav_logout" />
     </fragment>
 
     </navigation>

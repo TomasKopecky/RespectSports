@@ -10,7 +10,9 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 
-class TableTennisMatchViewModel(application: Application, matchId: String, userId: String, userToken: String) : AndroidViewModel(application) {
+class TableTennisMatchDetailViewModel(application: Application, matchId: String, userId: String, userToken: String) : AndroidViewModel(application) {
+
+    private val userToken = userToken
 
     private val _text = MutableLiveData<String>().apply {
         value = "Detail zápasu"
@@ -33,11 +35,11 @@ class TableTennisMatchViewModel(application: Application, matchId: String, userI
 
     //val match = matchesRepository.match
     init {
-        Log.i("MY_INFO", "FINALLY: " + matchId)
-
-        refreshMatchDetailFromRepository(matchId)
+        Log.i("MY_INFO", "MATCH ID: " + matchId)
+        Log.i("MY_INFO", "USER_ID: " + userId + ", USER_TOKEN: " + userToken)
+        refreshMatchDetailFromRepository(userToken, matchId)
     }
-    fun refreshMatchDetailFromRepository(id:String) {
+    fun refreshMatchDetailFromRepository(token:String, id:String) {
 
 
 
@@ -45,7 +47,8 @@ class TableTennisMatchViewModel(application: Application, matchId: String, userI
         //matchId?.let { Log.i("MY_INFO", it) }
         viewModelScope.launch {
             try {
-                matchesRepository.refreshMatchDetail(id,id)
+                Log.i("MY_INFO", "LAUNCHING MATCH DETAIL");
+                matchesRepository.refreshMatchDetail(token,id)
                 //Log.i("MY_INFO", "MATCH DETAIL SUCCESS" + match.value)
                 message.value = "DATA NAČTENA Z INTERNETU"
                 //_eventNetworkError.value = false
@@ -64,13 +67,17 @@ class TableTennisMatchViewModel(application: Application, matchId: String, userI
                 //_eventNetworkError.value = true
             }
             catch (serverError: retrofit2.HttpException) {
-                message.value = "Chyba při stahování zápasů - server vrátil chybu"
-                Log.i("MY_INFO", serverError.message())
+                message.value = "Chyba při stahování detailu zápasu - server vrátil chybu"
+                Log.i("MY_INFO", "SERVER ERROR: " + serverError.message())
+                Log.i("MY_INFO", "SERVER ERROR: " + serverError.toString())
+                Log.i("MY_INFO", "SERVER ERROR: " + serverError.response())
+                Log.i("MY_INFO", "SERVER ERROR: " + serverError.suppressed)
+                Log.i("MY_INFO", "SERVER ERROR: " + serverError.printStackTrace())
 
             }
             catch (dataStructureError: JsonDataException) {
                 message.value = "Chyba při stahování zápasů - server odpověděl chybně"
-                dataStructureError.message?.let { Log.i("MY_INFO", it) }
+                dataStructureError.message?.let { Log.i("MY_INFO", "JSON ERROR: " + it) }
             }
         }
     }
