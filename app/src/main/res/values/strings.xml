@@ -14,6 +14,7 @@
     <string name="menu_contacts">Kontakty</string>
     <string name="menu_logout">Odhlásit</string>
     <string name="title_activity_login">Přihlášení</string>
+    <string name="app_title">Respect Sport</string>
     <string name="prompt_email">E-mail</string>
     <string name="prompt_password">Heslo</string>
     <string name="action_sign_in">Přihlásit</string>

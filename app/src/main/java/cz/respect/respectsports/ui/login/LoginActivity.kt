@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import cz.respect.respectsports.MainActivity
@@ -27,12 +28,13 @@ class LoginActivity : AppCompatActivity() {
     private var tokenChecked: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         Log.i("MY_INFO", "LOGIN ACTIVITY STARTED")
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+       supportActionBar!!.title = getString(R.string.title_activity_login)
         val username = binding.username
         val password = binding.password
         val login = binding.login

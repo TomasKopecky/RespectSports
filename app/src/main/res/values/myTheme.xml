@@ -1,0 +1,8 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+<style name="Theme.App.MyTheme" parent="Theme.SplashScreen">
+    // Set the splash screen background, animated icon, and animation duration.
+    <item name="android:windowBackground">@drawable/splashscreen_background</item>
+    // Set the theme of the Activity that directly follows your splash screen.
+    <item name="postSplashScreenTheme">@style/Theme.RespectSports</item>  # Required.
+</style>
+</resources>
