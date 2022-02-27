@@ -24,9 +24,10 @@ data class DatabaseUser constructor(
     val id: String,
     val name: String,
     val username: String,
+    val email: String,
     val token: String)
 
 
 fun DatabaseUser.asDomainModel(): User {
-    return User(id = id,name = name,username=username,token = token)
+    return User(id = id,name = name,username=username,email = email,token = token)
 }

@@ -14,14 +14,11 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
-class TableTennisMatchesViewModel(application: Application, userId: String, userToken: String) : AndroidViewModel(application) {
+class TableTennisMatchesViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _text = MutableLiveData<String>().apply {
         value = "Zde bude seznam zápasů uživatele"
     }
-    private val userToken = userToken
-
-    val text: LiveData<String> = _text
 
     private val _message = MutableLiveData<String>()
 
@@ -40,43 +37,54 @@ class TableTennisMatchesViewModel(application: Application, userId: String, user
     val matchesList = matchesRepository.matches
 
     init {
-        Log.i("MY_INFO", "USER_ID: " + userId + ", USER_TOKEN: " + userToken)
-        refreshMatchesFromRepository(userToken)
-        //checkValidToken(userToken)
-        //refreshMatchesFromRepository(userId,userToken)
+        getLoggedUserFromDatabase()
     }
 
+    private fun getLoggedUserFromDatabase() {
+        viewModelScope.launch {
+            try {
+                userRepository.getLoggedUser()
+                Log.i("MY_INFO", "LOGGED USER OBTAINED FROM DB")
+            }
+            catch (dataStructureError: JsonDataException) {
+                _tokenError.value = true
+                Log.i("MY_INFO", "LOGGED USER OBTAINING FROM DB ERROR")
+            }
+        }
+    }
 
-    private fun refreshMatchesFromRepository(userToken: String) {
+    fun refreshMatchesFromRepository(userToken: String) {
         viewModelScope.launch {
             try {
                 matchesRepository.refreshMatches(userToken)
                 //Log.i("MY_INFO", "SUCCESS" + matchesList)
-                message.value = "DATA NAČTENA Z INTERNETU"
+                //message.value = "DATA NAČTENA Z INTERNETU"
                 //_eventNetworkError.value = false
                 //_isNetworkErrorShown.value = false
 
             } catch (networkError: IOException) {
-                _tokenError.value = true
-                // Show a Toast error message and hide the progress bar.
+                message.value = "Chyba při stahování zápasů z internetu - offline režim"
                 if(matchesList.value.isNullOrEmpty()) {
-                    message.value = "CHYBA PŘIPOJENÍ K INTERNETU"
+                    //message.value = "Chyba při stahování zápasů z internetu"
                     Log.i("MY_INFO", "NETWORK CONNECTION AND DATABASE ERROR - NO DATA OBTAINED")
                 }
                 else {
-                    message.value = "CHYBA PŘIPOJENÍ K INTERNETU - DATA NAČTENA Z DATABÁZE"
+                    //message.value = "CHYBA PŘIPOJENÍ K INTERNETU - DATA NAČTENA Z DATABÁZE"
                     Log.i("MY_INFO", "NETWORK CONNECTION ERROR - DATA OBTAINED FROM THE DATABASE")
                 }
                 //_eventNetworkError.value = true
             }
             catch (serverError: retrofit2.HttpException) {
-                _tokenError.value = true
-                message.value = "Chyba při stahování zápasů - server vrátil chybu"
                 Log.i("MY_INFO", serverError.message())
                 Log.i("MY_INFO", "RESPONSE: " + serverError.response().toString())
+                if (serverError.code() == 401) {
+                    _tokenError.value = true
+                }
+                else {
+                    message.value = "Chyba při stahování zápasů z internetu"
+                }
             }
             catch (dataStructureError: JsonDataException) {
-                _tokenError.value = true
                 message.value = "Chyba při stahování zápasů - server odpověděl chybně"
                 dataStructureError.message?.let { Log.i("MY_INFO", "JSON ERROR: " + it) }
             }

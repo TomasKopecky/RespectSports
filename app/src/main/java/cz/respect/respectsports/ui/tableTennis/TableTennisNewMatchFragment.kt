@@ -11,7 +11,10 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.distinctUntilChanged
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.navigation.NavigationBarView
 import cz.respect.respectsports.MainActivity
 import cz.respect.respectsports.R
 import cz.respect.respectsports.databinding.FragmentTableTennisNewMatchBinding
@@ -25,8 +28,6 @@ class TableTennisNewMatchFragment : Fragment() {
     private var _binding: FragmentTableTennisNewMatchBinding? = null
     private val binding get() = _binding!!
     private var insertButtonClicked:Boolean = false
-    private var homeScore: Int = 0
-    private var visitorScore: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,17 +38,24 @@ class TableTennisNewMatchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val tableTennisNewMatchViewModel = MainActivity.TableTennisViewModelFactory(requireActivity().application,(activity as? MainActivity)!!.userId,(activity as? MainActivity)!!.userToken).create(TableTennisNewMatchViewModel::class.java)
-
-        //val tableTennisNewMatchViewModel = ViewModelProvider(this).get(TableTennisNewMatchViewModel::class.java)
-
+        //val tableTennisNewMatchViewModel = MainActivity.TableTennisViewModelFactory(requireActivity().application,(activity as? MainActivity)!!.userId,(activity as? MainActivity)!!.userToken).create(TableTennisNewMatchViewModel::class.java)
+        val tableTennisNewMatchViewModel = ViewModelProvider(this).get(TableTennisNewMatchViewModel::class.java)
+        var userToken: String = ""
+        var userId: String = ""
         Log.i("MY_INFO","USER ID: "+(activity as? MainActivity)!!.userId)
         Log.i("MY_INFO","USER TOKEN: "+(activity as? MainActivity)!!.userToken)
         _binding = FragmentTableTennisNewMatchBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        binding.homeScore = homeScore.toString()
-        binding.visitorScore = visitorScore.toString()
+
+        //binding.homeScore = homeScore.toString()
+        //binding.visitorScore = visitorScore.toString()
+
+        tableTennisNewMatchViewModel.loggedUser.observe(viewLifecycleOwner) {
+            userToken = it.token!!
+            userId = it.id!!
+            tableTennisNewMatchViewModel.refreshPlayersFromRepository(it.token!!)
+        }
 
         tableTennisNewMatchViewModel.players.observe(viewLifecycleOwner) {
             val players: MutableList<Player> = ArrayList()
@@ -60,7 +68,7 @@ class TableTennisNewMatchFragment : Fragment() {
             players.addAll(it)
 
             players.forEach { player ->
-                if (player.id == (activity as? MainActivity)!!.userId) {
+                if (player.id == userId) {
                     homePlayer.add(player)
                 }
                 else {
@@ -86,23 +94,32 @@ class TableTennisNewMatchFragment : Fragment() {
             val visitorSpinner = binding.visitorSpinner
             if (homeSpinner != null) {
                 homeSpinner.setAdapter(homeAdapter)
+                homeSpinner.setSelection(tableTennisNewMatchViewModel.homePlayerPosition.value!!)
             }
             if (visitorSpinner != null) {
                 visitorSpinner.setAdapter(visitorAdapter)
+                visitorSpinner.setSelection(tableTennisNewMatchViewModel.visitorPlayerPosition.value!!)
             }
 
             tableTennisNewMatchViewModel.insertSuccess.observe(viewLifecycleOwner) {
                 if (it == true) {
                     Log.i("MY_INFO", "MATCH SUCCESSFULLY INSERTED - MATCHES")
                     if (insertButtonClicked) {
+                        homeSpinner.setSelection(0)
+                        visitorSpinner.setSelection(0)
                         insertButtonClicked = false
-                        Log.i("MY_INFO", "MATCH EDIT DONE - GET BACK")
+                        //Log.i("MY_INFO", "MATCH EDIT DONE - GET BACK")
+                        tableTennisNewMatchViewModel.resetValues()
                         val action = TableTennisNewMatchFragmentDirections.actionNewMatchDone()
                         findNavController().navigate(action)
                     }
                 }
             }
 
+            binding.newMatchViewModel = tableTennisNewMatchViewModel
+            binding.lifecycleOwner = viewLifecycleOwner
+
+            /*
             binding.homePlusButton!!.setOnClickListener() {
                 homeScore++
                 binding.homeScore = homeScore.toString()
@@ -127,6 +144,20 @@ class TableTennisNewMatchFragment : Fragment() {
                 }
             }
 
+             */
+
+            tableTennisNewMatchViewModel.message.observe(viewLifecycleOwner) {
+                showResultMessage(it)
+            }
+
+            tableTennisNewMatchViewModel.homePlayerPositionChange.observe(viewLifecycleOwner) {
+                tableTennisNewMatchViewModel.homePlayerPosition.value = binding.homeSpinner!!.selectedItemPosition
+            }
+
+            tableTennisNewMatchViewModel.visitorPlayerPositionChange.observe(viewLifecycleOwner) {
+                tableTennisNewMatchViewModel.visitorPlayerPosition.value = binding.visitorSpinner.selectedItemPosition
+            }
+
             binding.matchInsertButton!!.setOnClickListener {
                 val homePlayerNotSet = binding.homeSpinner!!.selectedItem.equals(null)
                 val visitorPlayerNotSet = binding.visitorSpinner!!.selectedItem.equals(null)
@@ -134,15 +165,15 @@ class TableTennisNewMatchFragment : Fragment() {
                 val visitorPlayerId = visitorAdapter.getItem(binding.visitorSpinner!!.selectedItemPosition)!!.id
 
 
-                val matchDate = binding.matchDate!!.text
+                val matchDate = tableTennisNewMatchViewModel.matchDate.value
 
-                Log.i("MY_INFO", "daTE: " + matchDate)
+                Log.i("MY_INFO", "DATE1: " + matchDate)
 
-                if (homeScore == 0 && visitorScore == 0) {
+                if (tableTennisNewMatchViewModel.homeCounter.equals(0) && tableTennisNewMatchViewModel.visitorCounter.equals(0)) {
                     showResultMessage("Nelze uložit zápas s výsledkem 0:0")
                 }
 
-                else if (matchDate == "") {
+                else if (matchDate.equals("")) {
                     showResultMessage("Nebylo zvoleno datum zápasu")
                 }
 
@@ -151,23 +182,22 @@ class TableTennisNewMatchFragment : Fragment() {
 
                     }
                 else {
-                    val matchResult = homeScore.toString()+":"+visitorScore.toString()
+                    val matchResult = tableTennisNewMatchViewModel.homeCounter.value.toString()+":"+tableTennisNewMatchViewModel.visitorCounter.value.toString()
                     val match = Match(null, SimpleDateFormat("d.M.yyyy").parse(matchDate.toString()).time, homePlayerId, null, null, visitorPlayerId, null,null, matchResult)
                     insertButtonClicked = true
-                    tableTennisNewMatchViewModel.insertMatch(match)
+                    tableTennisNewMatchViewModel.insertMatch(userToken,match)
                 }
             }
 
             tableTennisNewMatchViewModel.tokenError.observe(viewLifecycleOwner) {
-                Log.i("MY_INFO", "Chyba při ověření uživateleeee")
-                showResultMessage("Chyba při ověření uživatele")
-                //val action = TableTennisNewMatchFragmentDirections.actionLogout()
-                //findNavController().navigate(action)
+                showResultMessage("Chyba při ověření uživatele - přihlaste se")
+                val action = TableTennisNewMatchFragmentDirections.actionLogout()
+                findNavController().navigate(action)
             }
 
         }
 
-        (activity as AppCompatActivity?)!!.supportActionBar!!.title = getString(R.string.page_table_tennis_new_match)
+        //(activity as AppCompatActivity?)!!.supportActionBar!!.title = getString(R.string.page_table_tennis_new_match)
 
         binding.dateButton!!.setOnClickListener() {
             val picker: DatePickerDialog
@@ -179,7 +209,7 @@ class TableTennisNewMatchFragment : Fragment() {
             // date picker dialog
             picker = DatePickerDialog(
                 requireContext(),
-                { view, year, monthOfYear, dayOfMonth -> binding.matchDate!!.setText(dayOfMonth.toString() + "." + (monthOfYear + 1) + "." + year) },
+                { view, year, monthOfYear, dayOfMonth -> tableTennisNewMatchViewModel.matchDate.value = dayOfMonth.toString() + "." + (monthOfYear + 1) + "." + year }, //binding.matchDate!!.setText(dayOfMonth.toString() + "." + (monthOfYear + 1) + "." + year) },
                 year,
                 month,
                 day

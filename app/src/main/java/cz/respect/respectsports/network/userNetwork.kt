@@ -18,6 +18,7 @@ data class NetworkUser(
     val id: String,
     val name: String,
     val username: String,
+    val email: String,
     val token: String)
 
 /**
@@ -25,7 +26,7 @@ data class NetworkUser(
  */
 fun NetworkUserContainer.asDomainModel(): User {
     val encryption = DataEncryption
-    return User(user.id,user.name,user.username,encryption.encrypt(user.token))
+    return User(user.id,user.name,user.username,user.email,encryption.encrypt(user.token))
 }
 
 
@@ -34,7 +35,7 @@ fun NetworkUserContainer.asDomainModel(): User {
  */
 fun NetworkUserContainer.asDatabaseModel(): DatabaseUser {
     val encryption = DataEncryption
-    return DatabaseUser(user.id,user.name,user.username,encryption.encrypt(user.token))
+    return DatabaseUser(user.id,user.name,user.username,user.email,encryption.encrypt(user.token))
 }
 /**
  * Main entry point for network access

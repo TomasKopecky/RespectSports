@@ -4,15 +4,18 @@ import android.R
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.GridView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import cz.respect.respectsports.MainActivity
@@ -70,16 +73,10 @@ class TableTennisMatchesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val tableTennisMatchesViewModel = MainActivity.TableTennisViewModelFactory(requireActivity().application,(activity as? MainActivity)!!.userId,(activity as? MainActivity)!!.userToken).create(TableTennisMatchesViewModel::class.java)
-            //ViewModelProvider(this).get(TableTennisViewModel::class.java)
+        val tableTennisMatchesViewModel = ViewModelProvider(this).get(TableTennisMatchesViewModel::class.java)
 
         _binding = FragmentTableTennisMatchesBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        //val textView: TextView = binding.textGallery
-        tableTennisMatchesViewModel.text.observe(viewLifecycleOwner) {
-            //textView.text = it
-        }
 
         /*
         tableTennisMatchesViewModel.loginResult.observe(viewLifecycleOwner) {
@@ -94,6 +91,19 @@ class TableTennisMatchesFragment : Fragment() {
             navController.navigate(cz.respect.respectsports.R.id.action_new_match)
         }
 
+        /*
+        // preventing to get back to new match insert fragment
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true /* enabled by default */) {
+                override fun handleOnBackPressed() {
+                    //Log.i("MY_INFO", "BACK PRESSED iN MATCHES")
+
+                    findNavController().navigate(cz.respect.respectsports.R.id.nav_home)
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
+         */
 
         //val textViewNew: TextView = binding.textsHome
         tableTennisMatchesViewModel.matchesList.observe(viewLifecycleOwner) {
@@ -108,8 +118,13 @@ class TableTennisMatchesFragment : Fragment() {
                 setupGridView(itemArrayList, root)
         }
 
+        tableTennisMatchesViewModel.loggedUser.observe(viewLifecycleOwner) {
+            //Log.i("MY_INFO", "LOGGGED USER OBTAINED")
+            tableTennisMatchesViewModel.refreshMatchesFromRepository(it.token!!)
+        }
+
         tableTennisMatchesViewModel.tokenError.observe(viewLifecycleOwner) {
-            showResultMessage("Chyba při ověření uživatele")
+            showResultMessage("Chyba při ověření uživatele - přihlaste se")
             /*
             val newFragment: Fragment = LogoutFragment()
             val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
@@ -128,7 +143,7 @@ class TableTennisMatchesFragment : Fragment() {
             showResultMessage(it)
         })
 
-        (activity as AppCompatActivity?)!!.supportActionBar!!.title = getString(cz.respect.respectsports.R.string.page_table_tennis)
+        //(activity as AppCompatActivity?)!!.supportActionBar!!.title = getString(cz.respect.respectsports.R.string.page_table_tennis)
 
         return root
     }

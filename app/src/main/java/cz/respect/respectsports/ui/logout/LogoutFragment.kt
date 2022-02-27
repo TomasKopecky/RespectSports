@@ -38,6 +38,7 @@ class LogoutFragment : Fragment() {
             val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
             activity?.finish()
+            (activity as MainActivity?)?.showResultMessage("Uživatel odhlášen")
         })
 
         return root

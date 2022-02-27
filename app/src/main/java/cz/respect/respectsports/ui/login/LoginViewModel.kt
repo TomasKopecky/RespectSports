@@ -80,7 +80,7 @@ class LoginViewModel (application: Application) : AndroidViewModel(application) 
 
             } catch (networkError: IOException) {
                 Log.i("MY_INFO", "ERROR1")
-                message.value = "Chyba při ověřování tokenu - server nedostupný"
+                message.value = "Chyba při ověřování uživatele - server nedostupný"
                 // Show a Toast error message and hide the progress bar.
                 if (loggedUser.value?.id.isNullOrEmpty()) {
                     //message.value = "CHYBA PŘIPOJENÍ K INTERNETU"
@@ -94,12 +94,12 @@ class LoginViewModel (application: Application) : AndroidViewModel(application) 
 
             catch (serverError: HttpException) {
                 Log.i("MY_INFO", "NETWORK HTTP CONNECTION ERROR - NO DATA OBTAINED: " + serverError.message)
-                message.value = "Neplatný token"
+                message.value = "Chyba při ověření uživatele - přihlaste se"
             }
 
             catch (dataStructureError: JsonDataException) {
                 Log.i("MY_INFO", "JSON PARSING ERROR " + dataStructureError.message)
-                message.value = "Chyba při ověřování tokenu - server odpověděl chybně"
+                message.value = "Chyba při ověření uživatele - chyba serveru"
             }
         }
     }

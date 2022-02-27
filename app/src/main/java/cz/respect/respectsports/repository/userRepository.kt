@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import cz.respect.respectsports.database.MainDatabase
+import cz.respect.respectsports.database.UserDao
 import cz.respect.respectsports.database.asDomainModel
 import cz.respect.respectsports.domain.User
 import cz.respect.respectsports.network.UserNetwork
@@ -24,6 +25,14 @@ class UserRepository(private val database: MainDatabase) {
             val user = UserNetwork.user.getUser(username, password)
             database.userDao.insertLoggedUser(user.asDatabaseModel())
             Log.i("MY_INFO", "DATA WRITTEN TO THE DATABASE")
+        }
+    }
+
+    suspend fun getLoggedUser() {
+        withContext(Dispatchers.IO) {
+            database.userDao.getLoggedUser()
+            //val user = UserNetwork.user.getUser(username, password)
+            Log.i("MY_INFO", "LOGGED USER OBTAINED")
         }
     }
 

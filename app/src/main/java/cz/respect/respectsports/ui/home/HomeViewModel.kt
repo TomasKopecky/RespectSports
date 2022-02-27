@@ -13,7 +13,7 @@ import java.io.IOException
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+        value = "Zde bude domácí stránka hráče"
     }
     val text: LiveData<String> = _text
 

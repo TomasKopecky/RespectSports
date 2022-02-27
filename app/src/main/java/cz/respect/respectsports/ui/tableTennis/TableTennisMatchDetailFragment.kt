@@ -6,10 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import cz.respect.respectsports.MainActivity
 import cz.respect.respectsports.R
@@ -40,7 +40,7 @@ class TableTennisMatchDetailFragment : Fragment() {
     ): View {
         val matchId = args.id
 
-        val tableTennisMatchDetailViewModel = MainActivity.TableTennisMatchDetailViewModelFactory(requireActivity().application,matchId,(activity as? MainActivity)!!.userId,(activity as? MainActivity)!!.userToken).create(TableTennisMatchDetailViewModel::class.java)
+        val tableTennisMatchDetailViewModel = MainActivity.TableTennisMatchDetailViewModelFactory(requireActivity().application,matchId).create(TableTennisMatchDetailViewModel::class.java)//,(activity as? MainActivity)!!.userId,(activity as? MainActivity)!!.userToken).create(TableTennisMatchDetailViewModel::class.java)
         //    activity?.let { MainActivity.TableTennisMatchViewModelFactory(it.application,id) }
         //ViewModelProvider(this)[TableTennisMatchViewModel::class.java]
 
@@ -48,7 +48,7 @@ class TableTennisMatchDetailFragment : Fragment() {
         _binding = FragmentTableTennisMatchDetailBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        (activity as AppCompatActivity?)!!.supportActionBar!!.title = getString(R.string.page_table_tennis_detail)
+        //(activity as AppCompatActivity?)!!.supportActionBar!!.title = getString(R.string.page_table_tennis_detail)
 
 
         tableTennisMatchDetailViewModel.match.observe(viewLifecycleOwner) {
@@ -63,7 +63,16 @@ class TableTennisMatchDetailFragment : Fragment() {
             showResultMessage(it)
         }
 
+        tableTennisMatchDetailViewModel.loggedUser.observe(viewLifecycleOwner) {
+            Log.i("MY_INFO", "LOGGGED USER OBTAINED")
+            tableTennisMatchDetailViewModel.refreshMatchDetailFromRepository(it.token!!,matchId)
+        }
 
+        tableTennisMatchDetailViewModel.tokenError.observe(viewLifecycleOwner) {
+            showResultMessage("Chyba při ověření uživatele - přihlaste se")
+            val action = TableTennisMatchDetailFragmentDirections.actionLogout()
+            findNavController().navigate(action)
+        }
 
         Log.i("MY_INFO", "MATCH DETAIL - PARAMETER = $matchId")
 

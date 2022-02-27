@@ -1,8 +1,11 @@
 package cz.respect.respectsports
 
 import android.app.Application
+import android.app.Fragment
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.ViewModel
@@ -16,8 +19,8 @@ import com.google.android.material.navigation.NavigationView
 import cz.respect.respectsports.databinding.ActivityMainBinding
 import cz.respect.respectsports.databinding.NavHeaderMainBinding
 import cz.respect.respectsports.ui.tableTennis.TableTennisMatchDetailViewModel
-import cz.respect.respectsports.ui.tableTennis.TableTennisNewMatchViewModel
 import cz.respect.respectsports.ui.tableTennis.TableTennisMatchesViewModel
+import cz.respect.respectsports.ui.tableTennis.TableTennisNewMatchViewModel
 
 
 class MainActivity : AppCompatActivity() {
@@ -30,65 +33,24 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-/*
-        var launchSomeActivity = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            Log.i("MY_INFO", intent.getStringExtra("username").toString())
-            if (result.resultCode == Activity.RESULT_OK) {
-                val viewHeader = binding.navView.getHeaderView(0)
-                val navViewHeaderBinding : NavHeaderMainBinding = NavHeaderMainBinding.bind(viewHeader)
-                val intent = result.data
-                // passing obtained username of the logged user to the activity_main view (nav_view_header)
-                intent?.getStringExtra("username")?.let { navViewHeaderBinding.username = it/*binding.appBarMain.toolbar.title = getString(R.string.menu_home)+" - "+it */ }
-                //binding.appBarMain.toolbar.title = getString(R.string.user_welcome_start)+" - "+it
-
-            }
-
-        }
-
- */
-
-
-
-
-        /*
-        val intent = Intent(this, LoginActivity::class.java).apply {
-            //putExtra("name", "asljfk")
-        }
-
-         */
-
-
-        //val intent = Intent(this, LoginActivity::class.java)
-        //launchSomeActivity.launch(intent)
-        //startActivity(intent)
-        //finish()
-
-        //Toast.makeText(applicationContext, "fadslfjasdl", Toast.LENGTH_SHORT).show()
-        //intent.data.toString()
-
-
-//getDatabase(this)
-/*
-        val db = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java, "database-name"
-        ).allowMainThreadQueries().build()
-
-        val userDao = db.userDao()
-        val users: List<User> = userDao.getAll()
-
- */
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
+
+        val viewHeader = binding.navView.getHeaderView(0)
+        val navViewHeaderBinding: NavHeaderMainBinding = NavHeaderMainBinding.bind(viewHeader)
         // obtained username from loginactivity after successfull login
         intent.getStringExtra("username")?.let {
-            val viewHeader = binding.navView.getHeaderView(0)
-            val navViewHeaderBinding: NavHeaderMainBinding = NavHeaderMainBinding.bind(viewHeader)
+            Log.i("MY_INFO","USERNAME OBTAINED")
+
             navViewHeaderBinding.username = it
+        }
+
+        intent.getStringExtra("email")?.let {
+            Log.i("MY_INFO","EMAIL OBTAINED")
+            navViewHeaderBinding.email = it
         }
 
         intent.getStringExtra("userId")?.let {
@@ -98,15 +60,6 @@ class MainActivity : AppCompatActivity() {
         intent.getStringExtra("userToken")?.let {
             userToken = it
         }
-        /*
-        binding.navView.menu.getItem(3).setOnMenuItemClickListener {
-            Log.i("MY_INFO", "Logout run")
-            //finish()
-            //startActivity(getIntent())
-            true
-        }
-
-         */
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
@@ -142,17 +95,19 @@ class MainActivity : AppCompatActivity() {
         : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-
+/*
             if (modelClass.isAssignableFrom(
                     TableTennisMatchesViewModel::class.java)) {
 
                 return TableTennisMatchesViewModel(app,userId,userToken) as T
             }
 
+ */
+
             if (modelClass.isAssignableFrom(
                     TableTennisNewMatchViewModel::class.java)) {
 
-                return TableTennisNewMatchViewModel(app,userId,userToken) as T
+                return TableTennisNewMatchViewModel(app) as T
             }
 
             throw IllegalArgumentException("Unknown ViewModel class")
@@ -161,20 +116,30 @@ class MainActivity : AppCompatActivity() {
 
     class TableTennisMatchDetailViewModelFactory(
         private val app: Application,
-        private val matchId: String,
-        private val userId: String,
-        private val userToken: String)
+        private val matchId: String
+    )
         : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
+
             if (modelClass.isAssignableFrom(
                     TableTennisMatchDetailViewModel::class.java)) {
 
-                return TableTennisMatchDetailViewModel(app,matchId,userId,userToken) as T
+                return TableTennisMatchDetailViewModel(app,matchId) as T
             }
+
+
 
             throw IllegalArgumentException("Unknown ViewModel class")
         }
+    }
+
+    fun showResultMessage(apiResponseString:String) {
+        Toast.makeText(
+            this,
+            apiResponseString,
+            Toast.LENGTH_LONG
+        ).show()
     }
 }

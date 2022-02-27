@@ -91,7 +91,7 @@ class LoginActivity : AppCompatActivity() {
             showResultMessage(it)
         })
 
-        fun finalLogin(id:String?, name:String?, token:String?) {
+        fun finalLogin(id:String?, name:String?, email:String?, token:String?) {
             val loginResult =
                 LoginResult(success = LoggedInUserView(displayName = name!!))
             Log.i("MY_INFO", "RESULT OBTAINED")
@@ -108,6 +108,7 @@ class LoginActivity : AppCompatActivity() {
                 val intent = Intent(this, MainActivity::class.java)
                 intent.putExtra("username", name)
                 intent.putExtra("userId", id)
+                intent.putExtra("email", email)
                 intent.putExtra("userToken", token)
                 startActivity(intent)
                 finish()
@@ -120,7 +121,7 @@ class LoginActivity : AppCompatActivity() {
 
                 if (loginByUser) {
                     Log.i("MY_INFO", "LOGIN BY BUTTON")
-                    finalLogin(it.id,it.name,it.token)
+                    finalLogin(it.id,it.name,it.email,it.token)
 
                 }
 
@@ -131,7 +132,7 @@ class LoginActivity : AppCompatActivity() {
                         loginViewModel.checkToken(it.token!!)
                         loginViewModel.loginResult.observe(this) {
                             Log.i("MY_INFO", "LOGIN RESULT OBTAINED")
-                            finalLogin(loginViewModel.loggedUser.value!!.id, loginViewModel.loggedUser.value!!.name, loginViewModel.loggedUser.value!!.token)
+                            finalLogin(loginViewModel.loggedUser.value!!.id, loginViewModel.loggedUser.value!!.name, loginViewModel.loggedUser.value!!.email, loginViewModel.loggedUser.value!!.token)
                         }
                     }
                     catch (exception: Exception) {
