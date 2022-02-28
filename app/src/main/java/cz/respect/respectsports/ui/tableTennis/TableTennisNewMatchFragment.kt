@@ -47,7 +47,6 @@ class TableTennisNewMatchFragment : Fragment() {
         _binding = FragmentTableTennisNewMatchBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        (activity as MainActivity?)!!.setActionBarTitle(getString(cz.respect.respectsports.R.string.page_table_tennis_new_match))
         //binding.homeScore = homeScore.toString()
         //binding.visitorScore = visitorScore.toString()
 
@@ -167,9 +166,7 @@ class TableTennisNewMatchFragment : Fragment() {
 
                 val matchDate = tableTennisNewMatchViewModel.matchDate.value
 
-                Log.i("MY_INFO", "DATE1: " + matchDate)
-
-                if (tableTennisNewMatchViewModel.homeCounter.equals(0) && tableTennisNewMatchViewModel.visitorCounter.equals(0)) {
+                if (tableTennisNewMatchViewModel.homeCounter.value!!.equals(0) && tableTennisNewMatchViewModel.visitorCounter.value!!.equals(0)) {
                     showResultMessage("Nelze uložit zápas s výsledkem 0:0")
                 }
 
@@ -233,4 +230,8 @@ class TableTennisNewMatchFragment : Fragment() {
         _binding = null
     }
 
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        (activity as MainActivity?)!!.setActionBarTitle(getString(cz.respect.respectsports.R.string.page_table_tennis_new_match))
+    }
 }

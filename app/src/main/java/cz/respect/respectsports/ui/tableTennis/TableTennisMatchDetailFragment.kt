@@ -48,8 +48,6 @@ class TableTennisMatchDetailFragment : Fragment() {
         _binding = FragmentTableTennisMatchDetailBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        (activity as MainActivity?)!!.setActionBarTitle(getString(R.string.page_table_tennis_detail))
-
         tableTennisMatchDetailViewModel.match.observe(viewLifecycleOwner) {
             binding.homePlayerName = it[0].homePlayerName
             binding.visitorPlayerName = it[0].visitorPlayerName
@@ -94,5 +92,10 @@ override fun onDestroyView() {
     super.onDestroyView()
     _binding = null
 }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        (activity as MainActivity?)!!.setActionBarTitle(getString(R.string.page_table_tennis_detail))
+    }
 
 }

@@ -1,6 +1,7 @@
 package cz.respect.respectsports.ui.tableTennis
 
 import android.R
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -45,7 +46,7 @@ class TableTennisMatchesFragment : Fragment() {
         _binding = FragmentTableTennisMatchesBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        (activity as MainActivity?)!!.setActionBarTitle(getString(cz.respect.respectsports.R.string.page_table_tennis))
+
 
         binding.floatingActionButton3.setOnClickListener {
             val navController = Navigation.findNavController(requireView())
@@ -106,7 +107,7 @@ class TableTennisMatchesFragment : Fragment() {
             showResultMessage(it)
         })
 
-
+        //(activity as MainActivity).setActionBarTitle(getString(cz.respect.respectsports.R.string.page_table_tennis))
         return root
     }
 
@@ -163,5 +164,10 @@ class TableTennisMatchesFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        (activity as MainActivity).setActionBarTitle(getString(cz.respect.respectsports.R.string.page_table_tennis))
     }
 }

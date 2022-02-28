@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="newMatchViewModel" type="cz.respect.respectsports.ui.tableTennis.TableTennisNewMatchViewModel"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.home.HomeFragment">
+
+
+        <TextView
+            android:id="@+id/visitor_player_label"
+            android:layout_width="240dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="4dp"
+            android:gravity="center"
+            android:text="@string/visitor_player_label"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.54" />
+
+        <TextView
+            android:id="@+id/date_label"
+            android:layout_width="242dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="4dp"
+            android:gravity="center"
+            android:text="@string/date_label"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.803" />
+
+        <Spinner
+            android:id="@+id/visitor_spinner"
+            android:layout_width="243dp"
+            android:layout_height="33dp"
+            android:layout_gravity="bottom|center"
+            android:minHeight="48dp"
+            android:onItemSelected="@{() -> newMatchViewModel.visitorSpinnerPlayerChanged()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.52"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.544" />
+
+        <TextView
+            android:id="@+id/match_date"
+            android:layout_width="149dp"
+            android:layout_height="33dp"
+            android:gravity="center"
+            android:text="@{newMatchViewModel.matchDate}"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.798" />
+
+        <Button
+            android:id="@+id/match_insert_button"
+            android:layout_width="187dp"
+            android:layout_height="53dp"
+            android:layout_marginTop="24dp"
+            android:text="Vložit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.988" />
+
+        <Spinner
+            android:id="@+id/home_spinner"
+            android:layout_width="240dp"
+            android:layout_height="36dp"
+            android:layout_gravity="top|center"
+            android:layout_marginTop="4dp"
+            android:minHeight="48dp"
+            android:onItemSelected="@{() -> newMatchViewModel.homeSpinnerPlayerChanged()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.517"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/home_player_label"
+            android:layout_width="240dp"
+            android:layout_height="34dp"
+            android:layout_marginStart="4dp"
+            android:gravity="center"
+            android:text="@string/home_player_label"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.01" />
+
+        <Button
+            android:id="@+id/date_button"
+            android:layout_width="154dp"
+            android:layout_height="42dp"
+            android:backgroundTint="@android:color/darker_gray"
+            android:text="@string/date_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.499"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.68" />
+
+        <TextView
+            android:id="@+id/home_score_number"
+            android:layout_width="71dp"
+            android:layout_height="65dp"
+            android:gravity="center"
+            android:text="@{newMatchViewModel.homeCounter.toString()}"
+            android:textSize="40sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.407"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.236" />
+
+        <TextView
+            android:id="@+id/visitor_score_number"
+            android:layout_width="71dp"
+            android:layout_height="65dp"
+            android:gravity="center"
+            android:text="@{newMatchViewModel.visitorCounter.toString()}"
+            android:textSize="40sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.575"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.236" />
+
+        <TextView
+            android:id="@+id/score_delimiter"
+            android:layout_width="40dp"
+            android:layout_height="65dp"
+            android:gravity="center"
+            android:text=":"
+            android:textSize="40sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.492"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.236" />
+
+        <Button
+            android:id="@+id/home_plus_button"
+            android:layout_width="89dp"
+            android:layout_height="51dp"
+            android:backgroundTint="@android:color/darker_gray"
+            android:onClick="@{() -> newMatchViewModel.onHomeIncrement()}"
+            android:text="+"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.249"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.158" />
+
+        <Button
+            android:id="@+id/visitor_plus_button"
+            android:layout_width="89dp"
+            android:layout_height="51dp"
+            android:backgroundTint="@android:color/darker_gray"
+            android:onClick="@{() -> newMatchViewModel.onVisitorIncrement()}"
+            android:text="+"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.736"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.158" />
+
+        <Button
+            android:id="@+id/home_minus_button"
+            android:layout_width="89dp"
+            android:layout_height="51dp"
+            android:backgroundTint="@android:color/darker_gray"
+            android:onClick="@{() -> newMatchViewModel.onHomeDecrement()}"
+            android:text="-"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.249"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.369" />
+
+        <Button
+            android:id="@+id/visitor_minus_button"
+            android:layout_width="89dp"
+            android:layout_height="51dp"
+            android:backgroundTint="@android:color/darker_gray"
+            android:onClick="@{() -> newMatchViewModel.onVisitorDecrement()}"
+            android:text="-"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.736"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.369" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
