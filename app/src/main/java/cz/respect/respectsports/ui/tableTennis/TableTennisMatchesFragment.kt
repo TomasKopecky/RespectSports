@@ -1,18 +1,14 @@
 package cz.respect.respectsports.ui.tableTennis
 
 import android.R
-import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.util.Log
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.GridView
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -22,7 +18,6 @@ import cz.respect.respectsports.MainActivity
 import cz.respect.respectsports.databinding.FragmentTableTennisMatchesBinding
 import cz.respect.respectsports.domain.Match
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class TableTennisMatchesFragment : Fragment() {
@@ -40,34 +35,6 @@ class TableTennisMatchesFragment : Fragment() {
         R.drawable.btn_minus,
         R.drawable.btn_minus, R.drawable.btn_minus, R.drawable.btn_minus, R.drawable.btn_minus, R.drawable.btn_minus)
 
-    private val itemArrayList: ArrayList<String> = arrayListOf("asdlfjk")
-
-    private val itemList: Array<String>
-        get() = arrayOf(
-            "Item 1",
-            "Item 2",
-            "Item 3",
-            "Item 4",
-            "Item 5",
-            "Item 6",
-            "Item 7",
-            "Item 8",
-            "Item 9",
-            "Item 10",
-            "Item 11",
-            "Item 12",
-            "Item 13",
-            "Item 14",
-            "Item 15",
-            "Item 16",
-            "Item 17",
-            "Item 18",
-            "Item 19",
-            "Item 20",
-            "Item 21",
-            "Item 22"
-        )
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -78,13 +45,7 @@ class TableTennisMatchesFragment : Fragment() {
         _binding = FragmentTableTennisMatchesBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        /*
-        tableTennisMatchesViewModel.loginResult.observe(viewLifecycleOwner) {
-            Log.i("MY_INFO", "LOGIN RECEIVED")
-            tableTennisMatchesViewModel.getMatches()
-        }
-
-         */
+        (activity as MainActivity?)!!.setActionBarTitle(getString(cz.respect.respectsports.R.string.page_table_tennis))
 
         binding.floatingActionButton3.setOnClickListener {
             val navController = Navigation.findNavController(requireView())
@@ -104,6 +65,8 @@ class TableTennisMatchesFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
          */
+
+
 
         //val textViewNew: TextView = binding.textsHome
         tableTennisMatchesViewModel.matchesList.observe(viewLifecycleOwner) {
@@ -143,7 +106,6 @@ class TableTennisMatchesFragment : Fragment() {
             showResultMessage(it)
         })
 
-        //(activity as AppCompatActivity?)!!.supportActionBar!!.title = getString(cz.respect.respectsports.R.string.page_table_tennis)
 
         return root
     }

@@ -1,7 +1,6 @@
 package cz.respect.respectsports
 
 import android.app.Application
-import android.app.Fragment
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -19,7 +18,6 @@ import com.google.android.material.navigation.NavigationView
 import cz.respect.respectsports.databinding.ActivityMainBinding
 import cz.respect.respectsports.databinding.NavHeaderMainBinding
 import cz.respect.respectsports.ui.tableTennis.TableTennisMatchDetailViewModel
-import cz.respect.respectsports.ui.tableTennis.TableTennisMatchesViewModel
 import cz.respect.respectsports.ui.tableTennis.TableTennisNewMatchViewModel
 
 
@@ -141,5 +139,11 @@ class MainActivity : AppCompatActivity() {
             apiResponseString,
             Toast.LENGTH_LONG
         ).show()
+    }
+
+    fun setActionBarTitle(title: String?) {
+        //Log.i("MY_INFO", "TITLE CHANGE: " + title!!)
+        //val newTitle = supportActionBar!!.title.toString() + title
+        supportActionBar!!.title = title
     }
 }

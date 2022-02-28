@@ -47,7 +47,7 @@ class TableTennisNewMatchFragment : Fragment() {
         _binding = FragmentTableTennisNewMatchBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-
+        (activity as MainActivity?)!!.setActionBarTitle(getString(cz.respect.respectsports.R.string.page_table_tennis_new_match))
         //binding.homeScore = homeScore.toString()
         //binding.visitorScore = visitorScore.toString()
 

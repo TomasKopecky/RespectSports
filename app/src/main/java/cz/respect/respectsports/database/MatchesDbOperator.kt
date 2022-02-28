@@ -8,7 +8,7 @@ import java.util.*
 
 @Dao
 interface MatchDao {
-    @Query("SELECT * FROM matches ORDER BY date DESC")
+    @Query("SELECT * FROM matches ORDER BY date DESC, id ASC")
     fun getMatches(): LiveData<List<DatabaseMatch>>
 
     @Query("SELECT * FROM matches WHERE id=:id")

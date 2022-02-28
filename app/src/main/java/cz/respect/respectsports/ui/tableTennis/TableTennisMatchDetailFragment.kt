@@ -48,8 +48,7 @@ class TableTennisMatchDetailFragment : Fragment() {
         _binding = FragmentTableTennisMatchDetailBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        //(activity as AppCompatActivity?)!!.supportActionBar!!.title = getString(R.string.page_table_tennis_detail)
-
+        (activity as MainActivity?)!!.setActionBarTitle(getString(R.string.page_table_tennis_detail))
 
         tableTennisMatchDetailViewModel.match.observe(viewLifecycleOwner) {
             binding.homePlayerName = it[0].homePlayerName
