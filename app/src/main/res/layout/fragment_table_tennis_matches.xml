@@ -26,8 +26,11 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:clickable="true"
+        android:contentDescription="@string/new_match_button"
         android:src="@android:drawable/ic_input_add"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="ImageContrastCheck"
+        android:focusable="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

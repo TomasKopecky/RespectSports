@@ -29,19 +29,13 @@ class TableTennisMatchesFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    lateinit var gridView: GridView
-    private val playerNames : Array<String>
-        get() = arrayOf("Cristiano Ronaldo", "Joao Felix", "Bernado Silva", "Andre Silve", "Bruno Fernandez", "William Carvalho", "Nelson Semedo", "Pepe", "Rui Patricio")
-            private var playerImages = intArrayOf(R.drawable.btn_minus, R.drawable.btn_minus, R.drawable.btn_minus,
-        R.drawable.btn_minus,
-        R.drawable.btn_minus, R.drawable.btn_minus, R.drawable.btn_minus, R.drawable.btn_minus, R.drawable.btn_minus)
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val tableTennisMatchesViewModel = ViewModelProvider(this).get(TableTennisMatchesViewModel::class.java)
+        val tableTennisMatchesViewModel =
+            ViewModelProvider(this).get(TableTennisMatchesViewModel::class.java)
 
         _binding = FragmentTableTennisMatchesBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -53,33 +47,12 @@ class TableTennisMatchesFragment : Fragment() {
             navController.navigate(cz.respect.respectsports.R.id.action_new_match)
         }
 
-        /*
-        // preventing to get back to new match insert fragment
-        val callback: OnBackPressedCallback =
-            object : OnBackPressedCallback(true /* enabled by default */) {
-                override fun handleOnBackPressed() {
-                    //Log.i("MY_INFO", "BACK PRESSED iN MATCHES")
-
-                    findNavController().navigate(cz.respect.respectsports.R.id.nav_home)
-                }
-            }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-
-         */
-
-
-
-        //val textViewNew: TextView = binding.textsHome
         tableTennisMatchesViewModel.matchesList.observe(viewLifecycleOwner) {
-            //textViewNew.text = it.toString()
-                //val itemArrayList: ArrayList<String> = arrayListOf()
-                val itemArrayList: ArrayList<Match> = arrayListOf()
-                // val matchesArray: List<Match> = arrayListOf(it)
-                for (match in it) {
-                    itemArrayList.add(match)
-                }
-                //jj = it.toList()
-                setupGridView(itemArrayList, root)
+            val itemArrayList: ArrayList<Match> = arrayListOf()
+            for (match in it) {
+                itemArrayList.add(match)
+            }
+            setupGridView(itemArrayList, root)
         }
 
         tableTennisMatchesViewModel.loggedUser.observe(viewLifecycleOwner) {
@@ -89,16 +62,6 @@ class TableTennisMatchesFragment : Fragment() {
 
         tableTennisMatchesViewModel.tokenError.observe(viewLifecycleOwner) {
             showResultMessage("Chyba při ověření uživatele - přihlaste se")
-            /*
-            val newFragment: Fragment = LogoutFragment()
-            val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
-            transaction.replace(cz.respect.respectsports.R.id.table_tennis_match, newFragment)
-            transaction.addToBackStack(null)
-            transaction.commit()
-
-             */
-            //val action = TableTennisFragmentDirections.navigateToMatchDetail()
-            //findNavController().navigate(action)
             val action = TableTennisMatchesFragmentDirections.actionLogout()
             findNavController().navigate(action)
         }
@@ -107,53 +70,25 @@ class TableTennisMatchesFragment : Fragment() {
             showResultMessage(it)
         })
 
-        //(activity as MainActivity).setActionBarTitle(getString(cz.respect.respectsports.R.string.page_table_tennis))
         return root
     }
 
     private fun setupGridView(item: ArrayList<Match>, view: View) {
-        val mainAdapter = context?.let { ImageListAdapter(it.applicationContext,  R.layout.test_list_item, item) }
-        //val adapter = activity?.let { ImageListAdapter(it.applicationContext, R.layout.test_list_item, itemList) }
+        val mainAdapter =
+            context?.let { ImageListAdapter(it.applicationContext, R.layout.test_list_item, item) }
         binding.myGrid.adapter = mainAdapter
-        //binding.myGrid.adapter = mainAdapter
 
         binding.myGrid.onItemClickListener =
             AdapterView.OnItemClickListener { parent, v, position, id ->
                 Log.i("MY_INFO", "id: ${item[position].id}")
-                val action = TableTennisMatchesFragmentDirections.navigateToMatchDetail(item[position].id!!)
+                val action =
+                    TableTennisMatchesFragmentDirections.navigateToMatchDetail(item[position].id!!)
                 findNavController().navigate(action)
-                /*
-                val matchDetailViewModel =
-                    ViewModelProvider(this).get(TableTennisMatchViewModel::class.java)
-*/
-                /*
-                val someFragment: Fragment = TableTennisMatchFragment()
-                val transaction: FragmentTransaction = requireFragmentManager().beginTransaction()
-                transaction.replace(
-                    R.id.,
-                    someFragment
-                ) // give your fragment container id in first parameter
-
-                transaction.addToBackStack(null) // if written, this transaction will be added to backstack
-
-                transaction.commit()
-
-                 */
-
-                /*
-                Toast.makeText(
-                    activity, " Clicked Position: " + (position + 1),
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                 */
-
-
             }
     }
 
 
-    private fun showResultMessage(apiResponseString:String) {
+    private fun showResultMessage(apiResponseString: String) {
         Toast.makeText(
             activity,
             apiResponseString,

@@ -25,8 +25,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-    var userId: String = ""
-    var userToken: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,22 +39,13 @@ class MainActivity : AppCompatActivity() {
         val navViewHeaderBinding: NavHeaderMainBinding = NavHeaderMainBinding.bind(viewHeader)
         // obtained username from loginactivity after successfull login
         intent.getStringExtra("username")?.let {
-            Log.i("MY_INFO","USERNAME OBTAINED")
-
+            //Log.i("MY_INFO","USERNAME OBTAINED")
             navViewHeaderBinding.username = it
         }
 
         intent.getStringExtra("email")?.let {
-            Log.i("MY_INFO","EMAIL OBTAINED")
+            //Log.i("MY_INFO","EMAIL OBTAINED")
             navViewHeaderBinding.email = it
-        }
-
-        intent.getStringExtra("userId")?.let {
-            userId = it
-        }
-
-        intent.getStringExtra("userToken")?.let {
-            userToken = it
         }
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
@@ -86,54 +75,26 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    class TableTennisViewModelFactory(
-        private val app: Application,
-        private val userId: String,
-        private val userToken: String)
-        : ViewModelProvider.Factory {
-
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-/*
-            if (modelClass.isAssignableFrom(
-                    TableTennisMatchesViewModel::class.java)) {
-
-                return TableTennisMatchesViewModel(app,userId,userToken) as T
-            }
-
- */
-
-            if (modelClass.isAssignableFrom(
-                    TableTennisNewMatchViewModel::class.java)) {
-
-                return TableTennisNewMatchViewModel(app) as T
-            }
-
-            throw IllegalArgumentException("Unknown ViewModel class")
-        }
-    }
-
     class TableTennisMatchDetailViewModelFactory(
         private val app: Application,
         private val matchId: String
-    )
-        : ViewModelProvider.Factory {
+    ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
 
             if (modelClass.isAssignableFrom(
-                    TableTennisMatchDetailViewModel::class.java)) {
+                    TableTennisMatchDetailViewModel::class.java
+                )
+            ) {
 
-                return TableTennisMatchDetailViewModel(app,matchId) as T
+                return TableTennisMatchDetailViewModel(app, matchId) as T
             }
-
-
-
             throw IllegalArgumentException("Unknown ViewModel class")
         }
     }
 
-    fun showResultMessage(apiResponseString:String) {
+    fun showResultMessage(apiResponseString: String) {
         Toast.makeText(
             this,
             apiResponseString,

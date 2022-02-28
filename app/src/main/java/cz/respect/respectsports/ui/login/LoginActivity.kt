@@ -72,8 +72,6 @@ class LoginActivity : AppCompatActivity() {
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
 
-            // disable login button unless both username / password is valid
-            // disable login button unless both username / password is valid
             login.isEnabled = loginState.isDataValid
 
             if (loginState.usernameError != null) {
@@ -106,9 +104,7 @@ class LoginActivity : AppCompatActivity() {
 
                 val intent = Intent(this, MainActivity::class.java)
                 intent.putExtra("username", name)
-                intent.putExtra("userId", id)
                 intent.putExtra("email", email)
-                intent.putExtra("userToken", token)
                 startActivity(intent)
                 finish()
             }
@@ -139,31 +135,7 @@ class LoginActivity : AppCompatActivity() {
                     }
                 }
             }
-
-            //Complete and destroy login activity once successful
-            //finish()
         })
-
-
-
-        /*
-        loginViewModel.loggedUserValidToken.observe(this) {
-            if (it. != null) {
-                /*
-            val resultIntent = Intent(this, MainActivity::class.java)
-            resultIntent.putExtra("username", it.success?.displayName)
-            setResult(Activity.RESULT_OK, resultIntent)
-             */
-                val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("username", it.name)
-                intent.putExtra("userId", it.id)
-                intent.putExtra("userToken", it.token)
-                startActivity(intent)
-                finish()
-            }
-        }
-
-         */
 
         username.afterTextChanged {
             loginViewModel.loginDataChanged(

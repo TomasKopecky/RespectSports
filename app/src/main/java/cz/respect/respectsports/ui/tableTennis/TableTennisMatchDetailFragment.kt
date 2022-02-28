@@ -29,10 +29,6 @@ class TableTennisMatchDetailFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -40,7 +36,11 @@ class TableTennisMatchDetailFragment : Fragment() {
     ): View {
         val matchId = args.id
 
-        val tableTennisMatchDetailViewModel = MainActivity.TableTennisMatchDetailViewModelFactory(requireActivity().application,matchId).create(TableTennisMatchDetailViewModel::class.java)//,(activity as? MainActivity)!!.userId,(activity as? MainActivity)!!.userToken).create(TableTennisMatchDetailViewModel::class.java)
+        val tableTennisMatchDetailViewModel = MainActivity.TableTennisMatchDetailViewModelFactory(
+            requireActivity().application,
+            matchId
+        )
+            .create(TableTennisMatchDetailViewModel::class.java)//,(activity as? MainActivity)!!.userId,(activity as? MainActivity)!!.userToken).create(TableTennisMatchDetailViewModel::class.java)
         //    activity?.let { MainActivity.TableTennisMatchViewModelFactory(it.application,id) }
         //ViewModelProvider(this)[TableTennisMatchViewModel::class.java]
 
@@ -51,18 +51,19 @@ class TableTennisMatchDetailFragment : Fragment() {
         tableTennisMatchDetailViewModel.match.observe(viewLifecycleOwner) {
             binding.homePlayerName = it[0].homePlayerName
             binding.visitorPlayerName = it[0].visitorPlayerName
-            binding.result =  it[0].result
-            binding.date =  SimpleDateFormat("d.M.yyyy").format(it[0].date.toDouble().toLong()).toString()
+            binding.result = it[0].result
+            binding.date =
+                SimpleDateFormat("d.M.yyyy").format(it[0].date.toDouble().toLong()).toString()
         }
 
 
-        tableTennisMatchDetailViewModel.message.observe(viewLifecycleOwner){
+        tableTennisMatchDetailViewModel.message.observe(viewLifecycleOwner) {
             showResultMessage(it)
         }
 
         tableTennisMatchDetailViewModel.loggedUser.observe(viewLifecycleOwner) {
-            Log.i("MY_INFO", "LOGGGED USER OBTAINED")
-            tableTennisMatchDetailViewModel.refreshMatchDetailFromRepository(it.token!!,matchId)
+            //Log.i("MY_INFO", "LOGGGED USER OBTAINED")
+            tableTennisMatchDetailViewModel.refreshMatchDetailFromRepository(it.token!!, matchId)
         }
 
         tableTennisMatchDetailViewModel.tokenError.observe(viewLifecycleOwner) {
@@ -71,16 +72,10 @@ class TableTennisMatchDetailFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-        Log.i("MY_INFO", "MATCH DETAIL - PARAMETER = $matchId")
-
-        //tableTennisMatchViewModel.matchId = id
-
-        //tableTennisMatchViewModel.refreshMatchDetailFromRepository(id)
-
         return root
     }
 
-    private fun showResultMessage(apiResponseString:String) {
+    private fun showResultMessage(apiResponseString: String) {
         Toast.makeText(
             activity,
             apiResponseString,
@@ -88,10 +83,10 @@ class TableTennisMatchDetailFragment : Fragment() {
         ).show()
     }
 
-override fun onDestroyView() {
-    super.onDestroyView()
-    _binding = null
-}
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)

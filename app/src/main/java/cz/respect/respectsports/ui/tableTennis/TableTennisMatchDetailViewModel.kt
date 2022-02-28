@@ -11,7 +11,8 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 
-class TableTennisMatchDetailViewModel(application: Application, matchId: String) : AndroidViewModel(application) {
+class TableTennisMatchDetailViewModel(application: Application, matchId: String) :
+    AndroidViewModel(application) {
 
     private val _text = MutableLiveData<String>().apply {
         value = "Detail zápasu"
@@ -24,9 +25,9 @@ class TableTennisMatchDetailViewModel(application: Application, matchId: String)
 
     private val _message = MutableLiveData<String>()
 
-    val message : MutableLiveData<String> = _message
+    val message: MutableLiveData<String> = _message
 
-    private val matchesRepository = MatchesRepository(getMainDatabase(application),matchId)
+    private val matchesRepository = MatchesRepository(getMainDatabase(application), matchId)
 
     val match = matchesRepository.match
 
@@ -34,15 +35,7 @@ class TableTennisMatchDetailViewModel(application: Application, matchId: String)
 
     val tokenError: LiveData<Boolean> = _tokenError
 
-    //val matchesRepository = MatchesRepository(getMainDatabase(application),matchId)
-
-    //val match //= matchesRepository.match
-
-    //private val matchesRepository = MatchesRepository(getMainDatabase(application),matchId)
-
-    //val match = matchesRepository.match
     init {
-       //refreshMatchDetailFromRepository(userToken, matchId)
         getLoggedUserFromDatabase()
     }
 
@@ -50,52 +43,39 @@ class TableTennisMatchDetailViewModel(application: Application, matchId: String)
         viewModelScope.launch {
             try {
                 userRepository.getLoggedUser()
-                Log.i("MY_INFO", "LOGGED USER OBTAINED FROM DB")
-            }
-            catch (dataStructureError: JsonDataException) {
+                //Log.i("MY_INFO", "LOGGED USER OBTAINED FROM DB")
+            } catch (dataStructureError: JsonDataException) {
                 _tokenError.value = true
-                Log.i("MY_INFO", "LOGGED USER OBTAINING FROM DB ERROR")
+                //Log.i("MY_INFO", "LOGGED USER OBTAINING FROM DB ERROR")
             }
         }
     }
 
-    fun refreshMatchDetailFromRepository(token:String, id:String) {
-        //matchId?.let { Log.i("MY_INFO", it) }
+    fun refreshMatchDetailFromRepository(token: String, id: String) {
         viewModelScope.launch {
             try {
-                Log.i("MY_INFO", "LAUNCHING MATCH DETAIL");
-                matchesRepository.refreshMatchDetail(token,id)
+                //Log.i("MY_INFO", "LAUNCHING MATCH DETAIL");
+                matchesRepository.refreshMatchDetail(token, id)
                 //Log.i("MY_INFO", "MATCH DETAIL SUCCESS" + match.value)
-                //message.value = "DATA NAČTENA Z INTERNETU"
-                //_eventNetworkError.value = false
-                //_isNetworkErrorShown.value = false
 
             } catch (networkError: IOException) {
                 message.value = "Chyba při stahování detailu zápasu z internetu - offline režim"
-                // Show a Toast error message and hide the progress bar.
-                if(match!!.value.isNullOrEmpty()) {
-                    //message.value = "CHYBA PŘIPOJENÍ K INTERNETU"
-                    Log.i("MY_INFO", "NETWORK CONNECTION AND DATABASE ERROR - NO DATA OBTAINED")
+                if (match.value.isNullOrEmpty()) {
+                    //Log.i("MY_INFO", "NETWORK CONNECTION AND DATABASE ERROR - NO DATA OBTAINED")
+                } else {
+                    //Log.i("MY_INFO", "NETWORK CONNECTION ERROR - DATA OBTAINED FROM THE DATABASE")
                 }
-                else {
-                    //message.value = "CHYBA PŘIPOJENÍ K INTERNETU - DATA NAČTENA Z DATABÁZE"
-                    Log.i("MY_INFO", "NETWORK CONNECTION ERROR - DATA OBTAINED FROM THE DATABASE")
-                }
-                //_eventNetworkError.value = true
-            }
-            catch (serverError: retrofit2.HttpException) {
-                Log.i("MY_INFO", "SERVER ERROR: " + serverError.message())
+            } catch (serverError: retrofit2.HttpException) {
+                //Log.i("MY_INFO", "SERVER ERROR: " + serverError.message())
                 if (serverError.code() == 401) {
                     _tokenError.value = true
-                }
-                else {
+                } else {
                     message.value = "Chyba při stahování detailu zápasu - server vrátil chybu"
                 }
 
-            }
-            catch (dataStructureError: JsonDataException) {
+            } catch (dataStructureError: JsonDataException) {
                 message.value = "Chyba při stahování detailu zápasu - server odpověděl chybně"
-                dataStructureError.message?.let { Log.i("MY_INFO", "JSON ERROR: " + it) }
+                //dataStructureError.message?.let { Log.i("MY_INFO", "JSON ERROR: " + it) }
             }
         }
     }

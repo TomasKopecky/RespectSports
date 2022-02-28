@@ -15,7 +15,7 @@
     <string name="menu_logout">Odhlásit</string>
     <string name="title_activity_login">Přihlášení</string>
     <string name="app_title">Respect Sport</string>
-    <string name="prompt_email">E-mail</string>
+    <string name="prompt_email">E-mail nebo uživatelské jméno</string>
     <string name="prompt_password">Heslo</string>
     <string name="action_sign_in">Přihlásit</string>
     <string name="action_sign_in_short">Přihlásit</string>
@@ -30,4 +30,6 @@
     <string name="date_label">"Datum zápasu"</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="new_match_button">Vložit nový zápas</string>
+    <string name="score_delimiter">:</string>
 </resources>

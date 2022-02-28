@@ -50,7 +50,7 @@ class MatchesRepository(private val database: MainDatabase, private val matchId:
     suspend fun insertNewMatch(token: String, match: Match) {
         withContext(Dispatchers.IO) {
             val encryptor = DataEncryption
-            val matches = MatchNetwork.matches.insertNewMatch(encryptor.decrypt(token),match.homePlayerId!!, match.visitorPlayerId!!,match.result, match.date)
+            MatchNetwork.matches.insertNewMatch(encryptor.decrypt(token),match.homePlayerId!!, match.visitorPlayerId!!,match.result, match.date)
             //database.matchDao.insertAll(matches.asDatabaseModel())
             Log.i("MY_INFO", "NEW MATCH WRITTEN TO DATABASE")
 

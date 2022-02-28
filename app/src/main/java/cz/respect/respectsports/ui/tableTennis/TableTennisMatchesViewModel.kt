@@ -22,7 +22,7 @@ class TableTennisMatchesViewModel(application: Application) : AndroidViewModel(a
 
     private val _message = MutableLiveData<String>()
 
-    val message : MutableLiveData<String> = _message
+    val message: MutableLiveData<String> = _message
 
     private val userRepository = UserRepository(getMainDatabase(application))
 
@@ -32,7 +32,7 @@ class TableTennisMatchesViewModel(application: Application) : AndroidViewModel(a
 
     val tokenError: LiveData<Boolean> = _tokenError
 
-    private val matchesRepository = MatchesRepository(getMainDatabase(application),null)
+    private val matchesRepository = MatchesRepository(getMainDatabase(application), null)
 
     val matchesList = matchesRepository.matches
 
@@ -45,8 +45,7 @@ class TableTennisMatchesViewModel(application: Application) : AndroidViewModel(a
             try {
                 userRepository.getLoggedUser()
                 Log.i("MY_INFO", "LOGGED USER OBTAINED FROM DB")
-            }
-            catch (dataStructureError: JsonDataException) {
+            } catch (dataStructureError: JsonDataException) {
                 _tokenError.value = true
                 Log.i("MY_INFO", "LOGGED USER OBTAINING FROM DB ERROR")
             }
@@ -58,33 +57,23 @@ class TableTennisMatchesViewModel(application: Application) : AndroidViewModel(a
             try {
                 matchesRepository.refreshMatches(userToken)
                 //Log.i("MY_INFO", "SUCCESS" + matchesList)
-                //message.value = "DATA NAČTENA Z INTERNETU"
-                //_eventNetworkError.value = false
-                //_isNetworkErrorShown.value = false
 
             } catch (networkError: IOException) {
                 message.value = "Chyba při stahování zápasů z internetu - offline režim"
-                if(matchesList.value.isNullOrEmpty()) {
-                    //message.value = "Chyba při stahování zápasů z internetu"
+                if (matchesList.value.isNullOrEmpty()) {
                     Log.i("MY_INFO", "NETWORK CONNECTION AND DATABASE ERROR - NO DATA OBTAINED")
-                }
-                else {
-                    //message.value = "CHYBA PŘIPOJENÍ K INTERNETU - DATA NAČTENA Z DATABÁZE"
+                } else {
                     Log.i("MY_INFO", "NETWORK CONNECTION ERROR - DATA OBTAINED FROM THE DATABASE")
                 }
-                //_eventNetworkError.value = true
-            }
-            catch (serverError: retrofit2.HttpException) {
+            } catch (serverError: retrofit2.HttpException) {
                 Log.i("MY_INFO", serverError.message())
                 Log.i("MY_INFO", "RESPONSE: " + serverError.response().toString())
                 if (serverError.code() == 401) {
                     _tokenError.value = true
-                }
-                else {
+                } else {
                     message.value = "Chyba při stahování zápasů z internetu"
                 }
-            }
-            catch (dataStructureError: JsonDataException) {
+            } catch (dataStructureError: JsonDataException) {
                 message.value = "Chyba při stahování zápasů - server odpověděl chybně"
                 dataStructureError.message?.let { Log.i("MY_INFO", "JSON ERROR: " + it) }
             }

@@ -42,11 +42,12 @@ internal class ImageListAdapter internal constructor(
             holder = convertView.tag as ItemViewHolder
         }
 
-        //holder.id!!.text = this.itemList!![position].id
-        holder.date!!.text = SimpleDateFormat("d.M.yyyy").format( this.itemList!![position].date.toDouble().toLong()).toString()//this.itemList!![position].date
-        holder.homePlayerName!!.text = this.itemList!![position].homePlayerName
-        holder.visitorPlayerName!!.text = this.itemList!![position].visitorPlayerName
-        holder.result!!.text = this.itemList!![position].result
+        holder.date!!.text =
+            SimpleDateFormat("d.M.yyyy").format(this.itemList!![position].date.toDouble().toLong())
+                .toString()//this.itemList!![position].date
+        holder.homePlayerName!!.text = this.itemList[position].homePlayerName
+        holder.visitorPlayerName!!.text = this.itemList[position].visitorPlayerName
+        holder.result!!.text = this.itemList[position].result
         return convertView
     }
 
@@ -56,6 +57,5 @@ internal class ImageListAdapter internal constructor(
         var homePlayerName: TextView? = null
         var visitorPlayerName: TextView? = null
         var result: TextView? = null
-        //var icon: ImageView? = null
     }
 }
