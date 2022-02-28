@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import cz.respect.respectsports.MainActivity
 import cz.respect.respectsports.R
 import cz.respect.respectsports.databinding.ActivityLoginBinding
+import cz.respect.respectsports.network.NetworkConstants
 import java.lang.Exception
 
 
@@ -30,8 +31,6 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
-        Log.i("MY_INFO", "LOGIN ACTIVITY STARTED")
-
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
        supportActionBar!!.title = getString(R.string.title_activity_login)
